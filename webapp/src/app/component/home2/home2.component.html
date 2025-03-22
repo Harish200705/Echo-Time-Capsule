@@ -1,0 +1,43 @@
+<div class="body">
+    <nav class="navbar" [ngClass]="{ 'visible': isNavbarVisible }">
+        <div class="nav-brand">
+            <img src="assets/logo.png" alt="Logo" class="logo" />
+            <span class="site-name">Echo</span>
+        </div>
+
+        <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Services</a></li>
+        <li><a href="#">Contact</a></li>
+        </ul>
+
+        <div class="nav-buttons">
+            <button class="nav-btn">Login</button>
+            <button class="nav-btn signup-btn" (click)="goToSignUp()">Signup</button>
+        </div>
+    </nav>
+
+    <div class="horizontal-line" [ngClass]="{'visible': isLineVisible}" [ngStyle]="{'top': lineTop + 'px'}">
+        <div class="vertical-line v1" [ngClass]="{'visible': isLineVisible}">
+            <span class="text" [ngClass]="{'visible': isLineVisible}">
+                <span>It's stuck with you forever,</span><br>
+                <span>so promise you won't let it go.</span><br>
+            </span>
+          </div>
+          <div class="vertical-line v2" [ngClass]="{'visible': isLineVisible}">
+            <video class="video" [ngClass]="{'visible': isLineVisible}" autoplay muted loop playsinline>
+              <source src="assets/mainVid.mov" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          
+          <div class="vertical-line v3" [ngClass]="{'visible': isLineVisible}">
+            <img src="/assets/stock-img1.jpeg" class="image" [ngClass]="{'visible': isLineVisible}" alt="Image 2">
+          </div>
+    </div>
+
+    <span class="echo" [class.visible]="isVisible">ECHO</span>
+
+    <div class="scroll-content"></div>
+</div>

@@ -1,0 +1,74 @@
+/* Reset default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Remove any body margin */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: black;
+}
+
+
+.home-container {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background-color: black;
+}
+
+.home-bg, .home-subbg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: center;
+  transition: transform 0.15s ease-out, opacity 0.3s ease-out, filter 0.3s ease-out;
+  filter: blur(0.2px);
+}
+
+/* Main background image 
+.home-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}*/
+
+/* Overlaying background image 
+.home-subbg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}*/
+
+/* Centered content */
+.content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: white;
+  font-family: 'Arial', sans-serif;
+  margin-top: 20%;
+}
+
+.scroll-content {
+  height: 500vh; /* 200% of viewport height to make page scrollable */
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1));
+}

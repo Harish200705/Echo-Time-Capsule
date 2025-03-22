@@ -1,0 +1,240 @@
+@import url('https://fonts.googleapis.com/css2?family=Muller&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Exo:wght@600&display=swap');
+
+.body {
+    background-color: black;
+}
+.navbar {
+    position: fixed;
+    top: -100px; /* Start off-screen */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    padding: 1px 30px;
+    background: rgba(255, 255, 255, 0.1); /* Glossy effect */
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center; /* Center all items */
+    align-items: center;
+    opacity: 0; /* Start invisible */
+    transition: top 0.4s ease-in-out, opacity 0.5s ease-in-out;
+    z-index: 1000;
+}
+
+.navbar.visible {
+    top: 20px; /* Moves into view */
+    opacity: 1;
+}
+
+/* LOGO & BRAND NAME (Centered Left) */
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: absolute;
+    left: 20px; /* Align to left */
+}
+
+.logo {
+    height: 80px;
+    width: auto;
+}
+
+.site-name {
+    font-family: 'Exo';
+    font-size: 23px;
+    margin-left: -13px;
+    font-weight: bold;
+    color: white;
+}
+
+/* NAVIGATION LINKS (Proper padding for vertical alignment) */
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    margin-top: 15px;
+    padding: 0px 20px; /* Add top & bottom padding */
+    align-items: center;
+}
+
+.nav-links li {
+    display: flex;
+    align-items: center;
+}
+
+.nav-links a {
+    font-family: 'Exo';
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    padding: 10px 20px; /* Proper padding inside links */
+    transition: color 0.3s ease-in-out;
+    font-size: 17px;
+}
+
+.nav-links a:hover {
+    color: #f3aa4e;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 15px;
+    position: absolute;
+    right: 20px;
+}
+
+.nav-btn {
+    font-family: 'Exo';
+    background: transparent;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 17px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.nav-btn:hover {
+    background: #111820;
+    color: white;
+}
+
+.signup-btn {
+    background: #f3aa4e;
+    color: black;
+    border: none;
+}
+
+.signup-btn:hover {
+    background: none;
+    color: white;
+}
+
+/* BACKGROUND ANIMATION */
+body {
+    background: radial-gradient(circle, #1182a0 0%, black 100%);
+    background-size: 100% 100%;
+    transition: background 1s ease-in-out;
+}
+
+.scrolled {
+    background: radial-gradient(circle, #1182a0 100%, black 100%);
+}
+
+.horizontal-line {
+    position: fixed;
+    top: 50%;
+    right: -300%;
+    width: 1800px;
+    height: 2px;
+    background-color: #feffff;
+    animation: appear linear;
+    animation-timeline: view();
+    animation-range: entry 0% cover 40%;
+}
+
+.horizontal-line.visible {
+    animation: slideInWithBlur 0.5s ease-in-out forwards;
+}
+
+.vertical-line {
+    position: absolute;
+    top: 2px;
+    width: 2px;
+    height: 0;
+    background-color: #ffffff;
+}
+
+.horizontal-line.visible .v1.visible {
+    left: 380px;
+    animation: growVertical 0.3s ease-in-out 0.5s forwards;
+}
+
+.horizontal-line.visible .v1.visible .text {
+    font-family: 'Exo';
+    position: absolute;
+    top: 27px;
+    left: -80px;
+    width: 100px;
+    color: #ffffff;
+    font-size: 16px;
+    white-space: nowrap;
+    text-align: justify;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    animation: fadeIn 0.3s ease-in-out 0.5s forwards;
+}
+
+.horizontal-line.visible .v1.visible .text::after {
+    content: '';
+    display: inline-block;
+    width: 100%;
+}
+
+
+.horizontal-line.visible .v2.visible {
+    left: 944px;
+    animation: growVerticalUp 0.3s ease-in-out 0.6s forwards;
+}
+
+.horizontal-line.visible .v2.visible .video {
+    position: absolute;
+    top: -300px; /* Below the vertical line */
+    left: -145px; /* Center video relative to line (adjust based on width) */
+    width: 300px; /* Adjust size */
+    height: 300px; /* Adjust size */
+    opacity: 0;
+    animation: fadeIn 0.3s ease-in-out 0.6s forwards; /* Sync with v2 */
+    object-fit: cover; /* Ensure video fits nicely */
+}
+
+.horizontal-line.visible .v3.visible {
+    left: 1500px;
+    animation: growVertical 0.3s ease-in-out 0.7s forwards;
+}
+
+.horizontal-line.visible .v3.visible .image {
+    position: absolute;
+    top: 30px;
+    left: -143px;
+    width: 100vw;
+    max-width: 300px;
+    height: auto;
+    opacity: 0;
+    animation: fadeIn 0.3s ease-in-out 0.7s forwards;
+}
+
+
+@keyframes slideInWithBlur {
+    0% { right: -100%; filter: blur(10px); }
+    50% { right: -50%; filter: blur(15px);}
+    100% { right: 0; filter: blur(0);}
+}
+
+@keyframes growVertical {
+    0% { height: 0; }
+    100% { height: 20px; }
+}
+
+@keyframes growVerticalUp {
+    0% { height: 0; }
+    100% { height: 20px; top: -20px; }
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+
+
+.scroll-content {
+    height: 500vh; /* 200% of viewport height to make page scrollable */
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1));
+}
