@@ -1,43 +1,138 @@
 <div class="body">
-    <nav class="navbar" [ngClass]="{ 'visible': isNavbarVisible }">
-        <div class="nav-brand">
-            <img src="assets/logo.png" alt="Logo" class="logo" />
-            <span class="site-name">Echo</span>
-        </div>
 
-        <ul class="nav-links">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Services</a></li>
-        <li><a href="#">Contact</a></li>
-        </ul>
-
-        <div class="nav-buttons">
-            <button class="nav-btn">Login</button>
-            <button class="nav-btn signup-btn" (click)="goToSignUp()">Signup</button>
-        </div>
-    </nav>
-
-    <div class="horizontal-line" [ngClass]="{'visible': isLineVisible}" [ngStyle]="{'top': lineTop + 'px'}">
-        <div class="vertical-line v1" [ngClass]="{'visible': isLineVisible}">
-            <span class="text" [ngClass]="{'visible': isLineVisible}">
-                <span>It's stuck with you forever,</span><br>
-                <span>so promise you won't let it go.</span><br>
-            </span>
-          </div>
-          <div class="vertical-line v2" [ngClass]="{'visible': isLineVisible}">
-            <video class="video" [ngClass]="{'visible': isLineVisible}" autoplay muted loop playsinline>
-              <source src="assets/mainVid.mov" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-          </div>
-          
-          <div class="vertical-line v3" [ngClass]="{'visible': isLineVisible}">
-            <img src="/assets/stock-img1.jpeg" class="image" [ngClass]="{'visible': isLineVisible}" alt="Image 2">
-          </div>
+  <nav class="navbar" [ngClass]="{ 'visible': isNavbarVisible }">
+    <div class="nav-brand">
+      <img src="assets/logo.png" alt="Logo" class="logo" />
+      <span class="site-name">Echo</span>
     </div>
 
-    <span class="echo" [class.visible]="isVisible">ECHO</span>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Services</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
 
-    <div class="scroll-content"></div>
+    <div class="nav-buttons">
+      @if (!isLoggedIn) {
+          <button class="btn" (click)="goToLogin()">Login</button>
+      } @else {
+          <button class="btn" (click)="goToAccount()">Account</button>
+      }
+  </div>
+  </nav>
+
+  <div class="scroll-content"></div>
+  <div class="container">
+    <div class="header">
+      <div class="letter">
+        <img src="/assets/letter/letter-e.png" alt="">
+      </div>
+      <div class="letter">
+        <img src="/assets/letter/letter-c.png" alt="">
+      </div>
+      <div class="letter">
+        <img src="/assets/letter/letter-h.png" alt="">
+      </div>
+      <div class="letter">
+        <img src="/assets/letter/letter-o.png" alt="">
+      </div>
+    </div>
+
+    <div class="marquee-container">
+      <p class="marquee-text">Echo: A Message for the Future  |   Echo: A Message for the Future   |   
+        Echo: A Message for the Future   |   </p>
+    </div>
+
+    <div class="mainContent">
+      <div class="row" id="row-1">
+        <div class="col">
+          <div class="img-container right">
+            <img src="./assets/img-1.jpg" alt="error" />
+            <p>Opened on Oct 02, 2024</p>
+          </div>
+        </div>
+        <div class="col"></div>
+      </div>
+      <div class="row" id="row-2">
+        <div class="col"></div>
+        <div class="col">
+          <div class="img-container left">
+            <img src="./assets/img-2.jpg" alt="error" />
+            <p>Opened on Nov 05, 2024</p>
+          </div>
+        </div>
+      </div>
+      <div class="row" id="row-3">
+        <div class="col">
+          <div class="img-container right">
+            <img src="./assets/img-3.jpg" alt="error" />
+            <p>Opened on Dec 12, 2024</p>
+          </div>
+        </div>
+        <div class="col"></div>
+      </div>
+      <div class="row" id="row-4">
+        <div class="col"></div>
+        <div class="col">
+          <div class="img-container left">
+            <img src="./assets/img-4.jpeg" alt="error" />
+            <p>Scheduled on Apr 13, 2025</p>
+          </div>
+
+          <div class="steps-container">
+            <div class="reveal-container">
+              <div class="reveal-block"></div>
+              <div class="reveal-text">Step 1: Create your capsule (text, image, or video).</div>
+            </div>
+            <div class="reveal-container">
+              <div class="reveal-block"></div>
+              <div class="reveal-text">Step 2: Choose a future date for opening.</div>
+            </div>
+            <div class="reveal-container">
+              <div class="reveal-block"></div>
+              <div class="reveal-text">Step 3: Secure it with a password or make it public.</div>
+            </div>
+            <div class="reveal-container">
+              <div class="reveal-block"></div>
+              <div class="reveal-text">Step 4: Wait for the big reveal!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" id="row-5">
+        <div class="col">
+          <div class="img-container right">
+            <img src="./assets/img-5.jpeg" alt="error" />
+            <p>Scheduled on Jul 20, 2025</p>
+          </div>
+        </div>
+        <div class="col"></div>
+      </div>
+      <div class="row" id="row-6">
+        <div class="col"></div>
+        <div class="col">
+          <div class="img-container left">
+            <img src="./assets/img-6.jpeg" alt="error" />
+            <p>Scheduled on Aug 23, 2025</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="whitespace"></div>
+    </div>
+    
+    <section class="gradient"></section>
+
+    <section class="website-content">
+      <img class="bg-image" src="/assets/connection-bg.png" alt="">
+      <div class="text">MAKE YOUR CAPSULE</div>
+    </section>
+
+    
+    
+  
+    <div class="noise-overlay"></div>
+    <div class="black-gradient"></div>
+  </div>
 </div>

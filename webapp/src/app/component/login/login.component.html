@@ -1,0 +1,64 @@
+<div class="body">
+    <div class="main-content">
+        <!-- Slideshow on the left -->
+        <div class="container">
+            <div class="wrapper">
+                <img src="assets/slider-img/img-7.jpeg" alt="error">
+            </div>
+        </div>
+        
+        <!-- Form on the right for login -->
+        <div class="form-container">
+            <div class="top-left-logo">
+                <img src="/assets/logo.png" alt="Logo">
+                <span class="brand-name"></span>
+            </div>
+
+            <div class="form-group">
+                <h2 class="login">Login</h2>
+            </div>
+
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <!-- Email Field -->
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" formControlName="email" placeholder="Enter your email" size="103">
+                    @if (loginForm.controls['email'].invalid && loginForm.controls['email'].touched) {
+                        <span class="error">Please enter a valid email.</span>
+                    }
+                </div>
+
+                <!-- Password Field -->
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="password-wrapper">
+                        <input [type]="passwordFieldType" formControlName="password" placeholder="Enter your password" size="103">
+                        <img src="assets/eyelashes.png" alt="Show Password" class="toggle-password" (click)="togglePasswordVisibility()">
+                    </div>
+                    @if (loginForm.controls['password'].invalid && loginForm.controls['password'].touched) {
+                        <span class="error">Password is required.</span>
+                    }
+                </div>
+
+                <!-- Remember Me Checkbox -->
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" formControlName="rememberMe">
+                    <label>Remember Me</label>
+                </div>
+
+                <!-- Forgot Password & Create Account Links -->
+                <div class="link-group">
+                    <div class="form-group">
+                        <span class="forget-password" (click)="onForgetPassword()">Forgot Password?</span>
+                    </div>
+                    <div class="form-group">
+                        <span class="create-account" (click)="onCreateAccount()">Create Account</span>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+</div>

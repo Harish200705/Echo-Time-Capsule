@@ -1,49 +1,128 @@
-import { Component, HostListener, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, Inject, PLATFORM_ID, AfterViewInit, HostListener, ElementRef, ViewChild, OnInit } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { AuthService } from '../../services/auth.service';
+
+gsap.registerPlugin(ScrollTrigger);
 
 @Component({
   selector: 'app-home2',
   standalone: true,
-  imports: [CommonModule], // Import CommonModule for ngClass support
+  imports: [CommonModule],
   templateUrl: './home2.component.html',
-  styleUrls: ['./home2.component.css']
+  styleUrls: ['./home2.component.css'],
 })
-export class Home2Component {
+export class Home2Component implements OnInit, AfterViewInit {
+  textToReveal: string = "MAKE YOUR CAPSULE";
+  revealedText: string[] = [];
   isNavbarVisible: boolean = false;
-  isLineVisible : boolean = false;
-  lineTop = window.innerHeight / 2; // Initial top position (50% of viewport)
-  isVisible = false;
+  videoTranslate: number = 0;
+  backgroundOpacity: number = 0;
+  revealedSteps: string[] = [];
+  isBrowser: boolean;
+  hasShuffled: boolean = false;
+  isLoggedIn: boolean = false;
 
-  @HostListener('window:scroll', ['$event'])
-  onScroll(): void {
-    const scrollY = window.scrollY;
 
-    // Show navbar when scrolled
-    this.isNavbarVisible = scrollY > 50;
+  steps: string[] = [
+    "Step 1: Create your capsule.",
+    "Step 2: Set a future date.",
+    "Step 3: Secure it.",
+    "Step 4: Wait for the reveal!"
+  ];
 
-    // Change background effect on scroll
-    document.body.classList.toggle('scrolled', scrollY > 200);
+  @ViewChild('container', { static: false }) container!: ElementRef;
+  @ViewChild('shuffleText', { static: false }) shuffleTextElement!: ElementRef;
+  @ViewChild('gradientCircle', { static: false }) gradientCircle!: ElementRef;
+  @ViewChild('revealText', { static: false }) revealText!: ElementRef;
 
-    const scrollPosition = window.scrollY || document.documentElement.scrollTop;
-    this.isLineVisible = scrollPosition > 100;
 
-    if (scrollPosition > 250) {
-      // Move line and navbar up based on scroll position
-      const offset = scrollPosition - 200; // Start moving after 200px
-      this.lineTop = (window.innerHeight / 2) - offset; // Move up from initial position
-    } else {
-      // Reset to initial positions during transition phase
-      this.lineTop = window.innerHeight / 2;
+  router = inject(Router);
+
+  constructor(@Inject(PLATFORM_ID) private platformId: object, private el: ElementRef, private authService: AuthService) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+    this.revealedSteps = this.steps.map(() => '');
+    this.revealedText = this.textToReveal.split('').map(() => '');
+  }
+
+  
+  ngOnInit() {
+    if (this.isBrowser) {
+      this.revealOnScroll();
+      this.isLoggedIn = this.authService.isAuthenticated();
     }
-
-    
   }
 
-  router=inject(Router);
-  goToSignUp() {
+  ngAfterViewInit(): void {
+    if (!this.isBrowser) return;
+    this.initLetterAnimation();
+  }
+
+  private initLetterAnimation(): void {
+    const header: HTMLElement | null = document.querySelector(".header");
+    const letters: NodeListOf<HTMLElement> = document.querySelectorAll(".letter");
+
+    if (!header || letters.length === 0) return;
+
+    const sectionHeight: number = 100;
+
+    window.addEventListener("scroll", () => {
+      const scrollY: number = window.scrollY;
+      const orderPairs: number[][] = [[4, 5], [3, 6], [2, 7], [1, 8], [0, 9]];
+
+      orderPairs.forEach((pair: number[], orderIndex: number) => {
+        const startScroll: number = sectionHeight * orderIndex;
+        let moveFactor: number = 0;
+
+        if (scrollY >= startScroll) {
+          moveFactor = Math.min(1, (scrollY - startScroll) / sectionHeight);
+        }
+
+        const translateY: number = -moveFactor * header.offsetHeight;
+
+        pair.forEach((idx: number) => {
+          const letter = letters[idx];
+          if (letter) {
+            gsap.to(letter, {
+              y: translateY,
+              zIndex: 1 - moveFactor,
+            });
+          }
+        });
+      });
+    });
+  }
+
+  @HostListener('window:scroll', [])
+  onScroll(): void {
+    if (!this.isBrowser) return;
+    const scrollY: number = window.scrollY;
+    this.isNavbarVisible = scrollY > 20;
+    this.videoTranslate = -scrollY * 0.8;
+    this.revealOnScroll();
+  }
+
+  private revealOnScroll() {
+    const section = this.el.nativeElement.querySelector('.website-content');
+    if (section) {
+      const sectionTop = section.getBoundingClientRect().top;
+      const windowHeight = window.innerHeight;
+
+      if (sectionTop < windowHeight * 0.9) {
+        section.classList.add('visible');
+      }
+    }
+  }
+
+  goToLogin(): void {
     console.log('Navigating to signup...');
-    this.router.navigate(['/register'])
+    this.router.navigate(['/login']);
   }
 
+  goToAccount(): void {
+    console.log('Navigating to signup...');
+    this.router.navigate(['/register']);
+  }
 }

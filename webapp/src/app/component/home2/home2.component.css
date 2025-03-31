@@ -2,239 +2,471 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Exo:wght@600&display=swap');
 
-.body {
-    background-color: black;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
+
+.body {
+  width: 100%;
+  height: 100%;
+  min-height: 500vh;
+  background: linear-gradient(45deg, #3b3b3b, #171715, #99948c);
+  font-family: "Neue Montreal", sans-serif;
+  position: relative;
+    z-index: 1;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+    object-fit:inherit;
+}
+
+.header {
+    top: 0;
+    position: fixed;
+    margin-top: 2em;
+    padding: 2em;
+    width: 100%;
+    display: flex;
+    color: #fff;
+    z-index: 2;
+}
+
+.header:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 100%;
+    left: 0;
+    background: #0f0f0f;
+    z-index: 2;
+}
+
+.header > div {
+    flex: 1;
+    text-align: center;
+}
+
+.header .letter img {
+    display: block;
+    padding: 20px;
+}
+
 .navbar {
     position: fixed;
-    top: -100px; /* Start off-screen */
-    left: 50%;
-    transform: translateX(-50%);
+    top: -100px;
+    left: 5%;
+    /*transform: translateX(-50%);*/
     width: 90%;
     padding: 1px 30px;
-    background: rgba(255, 255, 255, 0.1); /* Glossy effect */
+    background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     border-radius: 20px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
     display: flex;
-    justify-content: center; /* Center all items */
+    justify-content: center;
     align-items: center;
-    opacity: 0; /* Start invisible */
+    opacity: 0;
     transition: top 0.4s ease-in-out, opacity 0.5s ease-in-out;
     z-index: 1000;
-}
-
-.navbar.visible {
-    top: 20px; /* Moves into view */
+  }
+  
+  .navbar.visible {
+    top: 20px;
     opacity: 1;
-}
-
-/* LOGO & BRAND NAME (Centered Left) */
-.nav-brand {
+  }
+  
+  /* LOGO & BRAND NAME */
+  .nav-brand {
     display: flex;
     align-items: center;
     gap: 10px;
     position: absolute;
-    left: 20px; /* Align to left */
-}
-
-.logo {
+    left: 20px;
+  }
+  
+  .logo {
     height: 80px;
     width: auto;
-}
-
-.site-name {
+  }
+  
+  .site-name {
     font-family: 'Exo';
     font-size: 23px;
     margin-left: -13px;
     font-weight: bold;
-    color: white;
-}
-
-/* NAVIGATION LINKS (Proper padding for vertical alignment) */
-.nav-links {
+    color: #ffffff;
+  }
+  
+  /* NAVIGATION LINKS */
+  .nav-links {
     list-style: none;
     display: flex;
     gap: 30px;
-    margin-top: 15px;
-    padding: 0px 20px; /* Add top & bottom padding */
+    margin-top: 4px;
+    padding: 0px 0px;
     align-items: center;
-}
-
-.nav-links li {
+  }
+  
+  .nav-links li {
     display: flex;
     align-items: center;
-}
-
-.nav-links a {
+  }
+  
+  .nav-links a {
     font-family: 'Exo';
     text-decoration: none;
-    color: white;
+    color: #ffffff;
     font-weight: 500;
-    padding: 10px 20px; /* Proper padding inside links */
+    padding: 10px 20px;
     transition: color 0.3s ease-in-out;
     font-size: 17px;
-}
-
-.nav-links a:hover {
-    color: #f3aa4e;
-}
-
-.nav-buttons {
+  }
+  
+  .nav-links a:hover {
+    color: #ffffff;
+  }
+  
+  .nav-buttons {
     display: flex;
     gap: 15px;
     position: absolute;
     right: 20px;
-}
-
-.nav-btn {
+  }
+  
+  .nav-btn {
     font-family: 'Exo';
     background: transparent;
     padding: 10px 16px;
     border: none;
     border-radius: 10px;
-    color: white;
+    color: #ffffff;
     font-size: 17px;
     cursor: pointer;
     transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
-}
-
-.nav-btn:hover {
-    background: #111820;
-    color: white;
-}
-
-.signup-btn {
-    background: #f3aa4e;
-    color: black;
+  }
+  
+  
+  .btn {
+    color: #ffffff;
     border: none;
-}
-
-.signup-btn:hover {
+  }
+  
+  .btn:hover {
     background: none;
     color: white;
+  }
+
+p {
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: uppercase;
 }
 
-/* BACKGROUND ANIMATION */
-body {
-    background: radial-gradient(circle, #1182a0 0%, black 100%);
-    background-size: 100% 100%;
-    transition: background 1s ease-in-out;
-}
-
-.scrolled {
-    background: radial-gradient(circle, #1182a0 100%, black 100%);
-}
-
-.horizontal-line {
-    position: fixed;
-    top: 50%;
-    right: -300%;
-    width: 1800px;
-    height: 2px;
-    background-color: #feffff;
-    animation: appear linear;
-    animation-timeline: view();
-    animation-range: entry 0% cover 40%;
-}
-
-.horizontal-line.visible {
-    animation: slideInWithBlur 0.5s ease-in-out forwards;
-}
-
-.vertical-line {
-    position: absolute;
-    top: 2px;
-    width: 2px;
-    height: 0;
-    background-color: #ffffff;
-}
-
-.horizontal-line.visible .v1.visible {
-    left: 380px;
-    animation: growVertical 0.3s ease-in-out 0.5s forwards;
-}
-
-.horizontal-line.visible .v1.visible .text {
-    font-family: 'Exo';
-    position: absolute;
-    top: 27px;
-    left: -80px;
-    width: 100px;
-    color: #ffffff;
-    font-size: 16px;
-    white-space: nowrap;
-    text-align: justify;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    animation: fadeIn 0.3s ease-in-out 0.5s forwards;
-}
-
-.horizontal-line.visible .v1.visible .text::after {
-    content: '';
-    display: inline-block;
+.mainContent {
     width: 100%;
+    height: 100%;
+    top: 0;
+    padding-top: 1350px;
+    z-index: 0;
+    transform: translateY(100px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
-
-.horizontal-line.visible .v2.visible {
-    left: 944px;
-    animation: growVerticalUp 0.3s ease-in-out 0.6s forwards;
+.mainContent.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
-.horizontal-line.visible .v2.visible .video {
-    position: absolute;
-    top: -300px; /* Below the vertical line */
-    left: -145px; /* Center video relative to line (adjust based on width) */
-    width: 300px; /* Adjust size */
-    height: 300px; /* Adjust size */
-    opacity: 0;
-    animation: fadeIn 0.3s ease-in-out 0.6s forwards; /* Sync with v2 */
-    object-fit: cover; /* Ensure video fits nicely */
+.row {
+    width: 100%;
+    display: flex;
 }
 
-.horizontal-line.visible .v3.visible {
-    left: 1500px;
-    animation: growVertical 0.3s ease-in-out 0.7s forwards;
+.col {
+    height: 100%;
 }
 
-.horizontal-line.visible .v3.visible .image {
-    position: absolute;
-    top: 30px;
-    left: -143px;
-    width: 100vw;
-    max-width: 300px;
-    height: auto;
-    opacity: 0;
-    animation: fadeIn 0.3s ease-in-out 0.7s forwards;
+.img-container {
+    width: fit-content;
+    height: 100%;
+    filter: sepia(100%);
+    box-shadow: 0px 0px 20px rgba(153, 148, 140, 0.7);
+    border: none; /* Ensures no border */
+    padding: 0; /* Removes extra space */
+    margin: 0;
 }
 
-
-@keyframes slideInWithBlur {
-    0% { right: -100%; filter: blur(10px); }
-    50% { right: -50%; filter: blur(15px);}
-    100% { right: 0; filter: blur(0);}
+.img-container.left {
+    text-align: right;
 }
 
-@keyframes growVertical {
-    0% { height: 0; }
-    100% { height: 20px; }
+.img-container p {
+  padding-top: 5%;
+  left: -10px;
+  text-shadow: 0px 0px 20px rgba(153, 148, 140, 0.5);
+    position: relative;
+    border: none; /* Ensures no border */
+    margin: 0;
+    color: #99948c;
+    opacity: 1;
+    transition: opacity 0.3s, transform 0.3s;
 }
 
-@keyframes growVerticalUp {
-    0% { height: 0; }
-    100% { height: 20px; top: -20px; }
+#row-1 {
+    height: 200px;
 }
 
-@keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+#row-2 {
+    height: 500px;
 }
 
+#row-3 {
+    height: 150px;
+}
 
+#row-4 {
+    height: 400px;
+}
 
-.scroll-content {
-    height: 500vh; /* 200% of viewport height to make page scrollable */
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1));
+#row-5 {
+    height: 700px;
+}
+
+#row-6 {
+    height: 300px;
+}
+
+.col:nth-child(1) {
+    flex: 3;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.col:nth-child(2) {
+    flex: 5;
+}
+
+.whitespace {
+    width: 100%;
+    height: 300px;
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-5%, 5%); }
+  50% { transform: translate(5%, -5%); }
+  75% { transform: translate(-5%, 5%); }
+}
+
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; 
+  background: radial-gradient(rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.06)), 
+              url('https://www.transparenttextures.com/patterns/noisy.png'); 
+  opacity: 0.8; /* Adjust for stronger noise */
+  mix-blend-mode: overlay; 
+  animation: grain 1s steps(4) infinite; /* Gives a moving grain effect */
+  z-index: 10000; 
+}
+
+.marquee-container {
+  top: 1350px;
+  width: 100vw;
+  height: 6vh;
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+  background: #171715;
+  cursor: ew-resize;
+  white-space: nowrap;
+  align-items: center;
+  padding-top: 1250px;
+  z-index: 0;
+  padding: 0 ;
+}
+
+.marquee-wrapper {
+  display: flex;
+  width: max-content; /* Ensures smooth infinite scrolling */
+  animation: moveText 20s linear infinite;
+}
+
+.marquee-text {
+  font-family: 'Exo';
+  display: inline-block;
+  margin: 0;
+  font-size: 2.5vw;
+  padding-right: 4vw;
+  font-weight: bold;
+  color: #99948c;
+  position: relative;
+  animation: moveText 17s linear infinite;
+}
+
+.marquee-wrapper .marquee-text:nth-child(2) {
+  margin-left: 0; /* Ensures a smooth transition */
+}
+
+@keyframes moveText {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+.steps-container {
+  margin-top: 180px;
+  margin-right: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.reveal-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reveal-block {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #171715;
+  animation: reveal-block 1s ease-in-out forwards;
+}
+
+.reveal-text {
+  font-family: 'Exo';
+  color: #99948c;
+  text-shadow: 0px 0px 20px rgba(153, 148, 140, 0.3);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  animation: reveal-text linear forwards;
+  animation-timeline: --reveal-scroll;
+}
+
+/* Keyframes for block movement */
+@keyframes reveal-block {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Keyframes for text fade-in */
+@keyframes reveal-text {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.text-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 3rem;
+  font-weight: bold;
+  color: white;
+}
+
+.website-content {
+  font-family: 'Exo', sans-serif;
+  position: relative;
+  width: 100vw;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #99948c;
+  opacity: 0; /* Initially hidden */
+  transform: translateY(50px); /* Start lower */
+  transition: opacity 1s ease-out, transform 1s ease-out;
+  overflow: hidden;
+  text-shadow: 0px 0px 20px rgba(153, 148, 140, 0.5);
+  background: transparent; /* Ensure it doesn't take background color */
+    z-index: 10;
+}
+/* Background Image */
+.bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  opacity: 0.2;
+}
+
+/* Button Section */
+.buttonMake {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* Button */
+.button {
+  min-width: 120px;
+  height: 40px;
+  padding: 10px 20px;
+  border-radius: 12px;
+  background: #171715;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffffff;
+  transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+/* Hover Effect */
+.button:hover {
+  background: #99948c;
+  color: #000000;
+}
+
+/* Animation Trigger */
+.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.make {
+  color: black;
+}
+
+.black-gradient {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 50vh; /* Adjustable */
+  background: linear-gradient(to bottom, transparent, black);
+  z-index: 15; /* Below website content */
 }

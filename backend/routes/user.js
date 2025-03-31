@@ -64,4 +64,37 @@ router.post("/login", async (req, res) => {
     }
 });
 
+router.post("/forgot-password", async (req, res) => {
+    try {
+        const { email, newPassword } = req.body;
+
+        // Check if email and new password are provided
+        if (!email || !newPassword) {
+            return res.status(400).json({ message: "Email and new password are required" });
+        }
+
+        // Find user by email
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Hash the new password
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+        // Update password
+        user.password = hashedPassword;
+        await user.save();
+
+        return res.status(200).json({ message: "Password updated successfully" });
+
+    } catch (error) {
+        console.error("Error in forgot password:", error);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+});
+
+
 module.exports = router;

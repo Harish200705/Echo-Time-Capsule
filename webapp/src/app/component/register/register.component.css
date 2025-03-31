@@ -2,139 +2,110 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Exo:wght@600&display=swap');
 
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Muller', sans-serif;
+}
 
 .body {
-    margin: 0;
-    font-family: 'Muller', sans-serif;
-    background: url('/assets/sky-bg.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
-    position: relative;
+    height: 100vh;
+    padding: 20px;
+    background-color: #f9f5f0;
+
 }
 
-.body::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
+.main-content {
+    display: flex;
+    max-width: 1800px;
     width: 100%;
     height: 100%;
-    background: inherit;
-    filter: blur(5px); 
-}
-
-/* Glass effect for form container */
-.form-container {
-    width: 90%;
-    max-width: 650px; /* Increased width */
-    padding: 30px;
+    background-color: #f9f5f0;
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.3); /* Increased transparency for a glossy look */
-    backdrop-filter: blur(15px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Stronger shadow for depth */
-    text-align: center;
-    position: relative;
-    z-index: 1;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Top Left Logo */
+/*Left section*/
+
+.form-container {
+    width: 50%;
+    padding: 40px;
+    background-color: #f9f5f0;
+    min-height: 90vh; /* Ensure enough space */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto;
+}
+
 .top-left-logo {
-    position: absolute;
-    top: 15px;
-    left: 20px;
+    align-self: flex-start;
     display: flex;
     align-items: center;
 }
 
 .top-left-logo img {
-    height: 80px;
-    margin-right: -14px;
+    height: 90px;
+    width: 90px;
+    margin-right: 5px;
 }
 
 .brand-name {
     font-family: 'Exo';
-    font-size: 26px;
-    font-weight: bolder;
-    font-weight: 900;
-    color: #4c4c4c;
-    -webkit-text-stroke: 3px #4c4c4c;
-    text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-/* Register Icon */
-.register-icon {
-    position: absolute;
-    top: -35px;
-    left: 50%;
-    transform: translateX(-50%);
-    height: 70px;
-    width: 70px;
-    padding: 10px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 3;
-}
-
-.register-icon img {
-    height: 40px;
-    width: 40px;
-}
-
-/* Signup Heading */
-.signup {
-    font-size: 26px;
+    font-size: 18px;
     font-weight: bold;
-    text-align: center;
-    margin-top: 40px;
-    margin-bottom: 20px;
-    color: #333;
+    color: #4a2c1a;
+    text-shadow: 2px 3px 5px rgba(0, 0, 0, 0.6);
 }
 
-/* Form Group */
+
+.signup {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 5px;
+}
+
+.form-group input[type="date"] {
+    width: 100%; /* Make it take the full width of the parent container */
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Optional shadow */
+}
+
 .form-group {
     margin-bottom: 20px;
-    text-align: left;
+    min-height: 55px;
+    flex-grow: 1;
 }
 
-/* Labels */
-label {
+.form-group label {
     display: block;
+    font-size: 14px;
+    color: #333;
     font-weight: bold;
     margin-bottom: 5px;
 }
 
-/* Inputs and Select */
-input, select {
-    width: 100%;
-    padding: 12px 15px;
-    font-size: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.5);
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+.form-group input {
+    padding: 10px;
+    padding-left: 16px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     color: #333;
 }
 
 .password-wrapper {
     position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.password-wrapper input {
-    width: 100%;
-    padding-right: 45px;
 }
 
 .toggle-password {
@@ -145,46 +116,88 @@ input, select {
     width: 24px;
     height: 24px;
     cursor: pointer;
-    opacity: 0.7;
-    transition: opacity 0.3s;
 }
 
-.toggle-password:hover {
-    opacity: 1;
-}
-
-
-/* Checkbox */
 .checkbox-group {
     display: flex;
     align-items: center;
+    font-size: 14px;
+    color: #666;
+    padding: 0;
+}
+
+.checkbox-group label {
+    margin-left: 0;
 }
 
 .checkbox-group input {
-    width: auto;
-    margin-right: 10px;
+    margin-left: 0;
+    margin-right: 5px;
 }
 
-/* Button */
 button {
     width: 100%;
     padding: 12px;
-    background: linear-gradient(45deg, #007bff, #0056b3);
-    color: white;
-    font-size: 18px;
+    background: linear-gradient(to right,#d4a373, #a66c3f);
+    font-size: 16px;
     border: none;
-    border-radius: 10px;
+    border-radius: 30px;
+    color: #fff;
     cursor: pointer;
     font-weight: bold;
     transition: all 0.3s ease;
+    margin-top: 20px;
 }
 
 button:hover {
-    background: linear-gradient(45deg, #0056b3, #003d80);
+    background: linear-gradient(to right,#d4a373, #a66c3f);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 button:disabled {
     background: #aaa;
     cursor: not-allowed;
+}
+
+.forget-password,
+.create-account {
+    font-size: 14px;
+    color: #d4a373;
+    cursor: pointer;
+    text-decoration: underline;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.forget-password:hover,
+.create-account:hover {
+    color: #a66c3f;
+}
+
+.container {
+    width: 50%;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 5px 15px 25px rgba(0, 0, 0, 0.3);
+}
+
+.wrapper {
+    display: flex;
+    width: 100%; 
+    height: 100%;
+}
+
+.wrapper img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    object-fit: cover; /* Ensures images are fully displayed */
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+    display: block;
+    min-height: 20px; 
 }
