@@ -123,6 +123,15 @@ export class Home2Component implements OnInit, AfterViewInit {
 
   goToAccount(): void {
     console.log('Navigating to signup...');
-    this.router.navigate(['/register']);
+    this.router.navigate(['/main']);
+  }
+
+  goToMain(): void {
+    console.log('Navigating to main');
+    this.router.navigate(['/main']);
+  }
+
+  navigateTo(route: string): void {
+    this.router.navigate([`/${route}`]);
   }
 }

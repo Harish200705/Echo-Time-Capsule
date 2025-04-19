@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = environment.apiUrl + "/user/register";
+  private apiUrl = environment.apiUrl + '/user/register';
 
   constructor(private http: HttpClient) {}
 
@@ -20,7 +20,7 @@ export class AuthService {
     gender: string;
     phone: string;
   }): Observable<any> {
-    return this.http.post(environment.apiUrl + "/user/register", userData);
+    return this.http.post(environment.apiUrl + '/user/register', userData);
   }
 
   login(userData: {
@@ -30,18 +30,33 @@ export class AuthService {
     return this.http.post(environment.apiUrl + '/user/login', userData);
   }
 
+  // New method to handle login response
+  handleLoginResponse(response: any): void {
+    if (response.token && response.user) {
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('user', JSON.stringify(response.user));
+    } else {
+      throw new Error('Invalid login response: missing token or user data');
+    }
+  }
+
   isAuthenticated(): boolean {
     return !!localStorage.getItem('token');
   }
 
-  get isLoggedIn() {
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  get isLoggedIn(): boolean {
     let token = localStorage.getItem('token');
     if (token) {
       return true;
     }
     return false;
   }
-  get isAdmin() {
+
+  get isAdmin(): boolean {
     let userData = localStorage.getItem('user');
     if (userData) {
       return JSON.parse(userData).isAdmin;
@@ -49,14 +64,15 @@ export class AuthService {
     return false;
   }
 
-  get userName() {
+  get userName(): string | null {
     let userData = localStorage.getItem('user');
     if (userData) {
       return JSON.parse(userData).name;
     }
     return null;
   }
-  get userEmail() {
+
+  get userEmail(): string | null {
     let userData = localStorage.getItem('user');
     if (userData) {
       return JSON.parse(userData).email;
@@ -64,13 +80,20 @@ export class AuthService {
     return null;
   }
 
-  onForgetPassword(email: string, newPassword: string) {
+  onForgetPassword(email: string, newPassword: string): Observable<any> {
     return this.http.post(environment.apiUrl + '/user/forgot-password', { email, newPassword });
   }
-  
-  logout() {
+
+  logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
   }
-}
 
+  getUser(): any {
+    let userData = localStorage.getItem('user');
+    if (userData) {
+      return JSON.parse(userData);
+    }
+    return null;
+  }
+}

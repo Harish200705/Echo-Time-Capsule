@@ -1,0 +1,383 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: url('/assets/background.jpg') no-repeat left top fixed;
+  background-size: cover;
+  color: #fff;
+  line-height: 1.6;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background: rgba(0, 0, 0, 0.7);
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 8.2%;
+  left: 0;
+  margin: 0;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 0;
+}
+
+.logo h1 {
+  font-size: 28px;
+  margin-bottom: 5px;
+  color: #ffd700;
+}
+
+.logo p {
+  font-size: 14px;
+  color: #ccc;
+}
+
+.profile-section {
+  position: relative;
+}
+
+.profile-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.profile-circle:hover {
+  transform: scale(1.1);
+}
+
+.profile-menu {
+  display: none;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  min-width: 150px;
+  overflow: hidden;
+  z-index: 20;
+}
+
+.profile-section:hover .profile-menu {
+  display: block;
+}
+
+.profile-menu a {
+  display: block;
+  padding: 12px 20px;
+  color: #333;
+  text-decoration: none;
+  font-size: 16px;
+  transition: background 0.3s ease;
+}
+
+.profile-menu a:hover {
+  background: #f0f0f0;
+}
+
+.notification-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.notification-btn:hover .bell-icon {
+  color: #ffd700;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.friends-sidebar {
+  width: 250px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 20px;
+  overflow-y: auto;
+  position: absolute;
+  left: 0;
+  top: 60px;
+  height: calc(100% - 60px);
+}
+
+.friends-sidebar h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.friends-list {
+  list-style: none;
+}
+
+.friends-list li {
+  margin-bottom: 10px;
+}
+
+.friend-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 15px;
+  background: #444;
+  border: none;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.friend-btn:hover {
+  background: #555;
+  transform: translateX(5px);
+}
+
+.friend-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+  object-fit: cover;
+}
+
+.memory-section {
+  flex: 1;
+  padding: 30px;
+  margin-left: 250px;
+  margin-right: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.greeting {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.greeting h2 {
+  font-size: 28px;
+  color: #fff;
+}
+
+.action-buttons {
+  display: flex;
+  flex-wrap: nowrap; /* Ensure single row */
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* Ensure it takes full available width */
+  flex-shrink: 0; /* Prevent shrinking */
+}
+
+.action-btn {
+  padding: 25px;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.3s ease, transform 0.3s ease;
+  width: 150px;
+  height: 150px;
+  flex: 0 0 auto; /* Prevent buttons from shrinking */
+}
+
+.square-btn {
+  border-radius: 10px;
+  justify-content: center;
+  text-align: center;
+}
+
+.square-btn .btn-text {
+  display: block;
+  font-size: 14px;
+  white-space: normal;
+}
+
+.action-btn:hover {
+  background: rgba(0, 0, 0, 0.8);
+  transform: scale(1.05);
+}
+
+.icon {
+  font-size: 30px;
+}
+
+.timeline-section {
+  width: 250px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 20px;
+  overflow-y: auto;
+  position: absolute;
+  right: 0;
+  top: 60px;
+  height: calc(100% - 60px);
+}
+
+.timeline-header {
+  background: rgba(0, 0, 0, 0.9);
+  padding: 15px;
+  border-radius: 8px 8px 0 0;
+  margin: -20px -20px 20px -20px; /* Integrate the empty space */
+  text-align: center;
+}
+
+.timeline-header h2 {
+  font-size: 20px;
+  margin: 0;
+  color: #fff;
+}
+
+.timeline-list {
+  list-style: none;
+  padding: 0;
+}
+
+.timeline-item {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.timeline-item:hover {
+  transform: translateX(5px);
+}
+
+.timeline-date {
+  font-size: 14px;
+  color: #ffd700;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.timeline-item p {
+  font-size: 14px;
+  color: #ccc;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .friends-sidebar {
+      width: 200px;
+  }
+  .memory-section {
+      padding: 20px;
+      margin-left: 200px;
+      margin-right: 200px;
+  }
+  .timeline-section {
+      width: 200px;
+  }
+  .greeting h2 {
+      font-size: 22px;
+  }
+  .action-buttons {
+      flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  }
+  .action-btn {
+      width: 120px;
+      height: 120px;
+      padding: 20px;
+      font-size: 12px;
+  }
+  .icon {
+      font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+      flex-direction: column;
+      padding: 15px;
+  }
+  .logo {
+      margin-bottom: 10px;
+  }
+  .header-right {
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+  }
+  .friends-sidebar {
+      width: 100%;
+      height: 200px;
+      position: relative;
+      top: 0;
+  }
+  .timeline-section {
+      width: 100%;
+      height: auto;
+      position: relative;
+      top: 0;
+      margin-top: 20px;
+  }
+  .main-content {
+      flex-direction: column;
+  }
+  .memory-section {
+      padding: 15px;
+      margin-left: 0;
+      margin-right: 0;
+  }
+  .action-buttons {
+      flex-direction: column;
+      align-items: center;
+  }
+  .action-btn {
+      width: 100px;
+      height: 100px;
+      padding: 15px;
+      font-size: 10px;
+  }
+  .icon {
+      font-size: 20px;
+  }
+}

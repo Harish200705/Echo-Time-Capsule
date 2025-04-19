@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECHO - Your Memories</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <h1>ECHO</h1>
+                <p>Your Memories, Delivered by Time.</p>
+            </div>
+            <div class="header-right">
+                <button class="notification-btn" aria-label="Notifications">
+                    <span class="bell-icon">🔔</span>
+                </button>
+                <div class="profile-section">
+                    <img src="/assets/profile-pic.jpg" alt="Profile Picture" class="profile-circle">
+                    <nav class="profile-menu" id="profileMenu">
+                        <a href="#" data-action="view-profile">View Profile</a>
+                        <a href="#" data-action="logout">Logout</a>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        <main class="main-content">
+            <aside class="friends-sidebar">
+                <h2>My Friends</h2>
+                <ul class="friends-list">
+                    <li>
+                        <button class="friend-btn" data-friend="Friend1">
+                            <img src="/assets/profile1.jpeg" alt="Friend1 Profile" class="friend-avatar">
+                            <span>Friend1</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="friend-btn" data-friend="Friend2">
+                            <img src="/assets/profile2.jpg" alt="Friend2 Profile" class="friend-avatar">
+                            <span>Friend2</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="friend-btn" data-friend="Friend3">
+                            <img src="/assets/profile3.jpeg" alt="Friend3 Profile" class="friend-avatar">
+                            <span>Friend3</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="friend-btn" data-friend="Friend4">
+                            <img src="/assets/profile4.jpeg" alt="Friend4 Profile" class="friend-avatar">
+                            <span>Friend4</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="friend-btn" data-friend="Friend5">
+                            <img src="/assets/profile5.jpg" alt="Friend5 Profile" class="friend-avatar">
+                            <span>Friend5</span>
+                        </button>
+                    </li>
+                </ul>
+            </aside>
+            <section class="memory-section">
+                <div class="greeting">
+                    <h2>Hey, Username</h2>
+                </div>
+                <div class="action-buttons">
+                    <button class="action-btn square-btn" data-action="add">
+                        <span class="icon">👥</span>
+                        <span class="btn-text">Add Friends</span>
+                    </button>
+                    <button class="action-btn square-btn" data-action="collab">
+                        <span class="icon">🤝</span>
+                        <span class="btn-text">Collab</span>
+                    </button>
+                    <button class="action-btn square-btn" data-action="view">
+                        <span class="icon">👁️</span>
+                        <span class="btn-text">View Capsule</span>
+                    </button>
+                    <button class="action-btn square-btn" data-action="create">
+                        <span class="icon">➕</span>
+                        <span class="btn-text">Create Capsule</span>
+                    </button>
+                    <button class="action-btn square-btn" data-action="delete">
+                        <span class="icon">🗑️</span>
+                        <span class="btn-text">Delete Capsule</span>
+                    </button>
+                </div>
+            </section>
+            <aside class="timeline-section">
+                <div class="timeline-header">
+                    <h2>Memory Timeline</h2>
+                </div>
+                <ul class="timeline-list">
+                    <li class="timeline-item">
+                        <span class="timeline-date">April 1, 2025</span>
+                        <p>Capsule: "First Day Memories" - A nostalgic look back.</p>
+                    </li>
+                    <li class="timeline-item">
+                        <span class="timeline-date">March 15, 2025</span>
+                        <p>Capsule: "Family Reunion" - Shared with friends.</p>
+                    </li>
+                    <li class="timeline-item">
+                        <span class="timeline-date">February 10, 2025</span>
+                        <p>Capsule: "Winter Trip" - Collaborative project.</p>
+                    </li>
+                    <li class="timeline-item">
+                        <span class="timeline-date">January 5, 2025</span>
+                        <p>Capsule: "New Year Reflections" - Personal memory.</p>
+                    </li>
+                </ul>
+            </aside>
+        </main>
+    </div>
+
+</body>
+</html>

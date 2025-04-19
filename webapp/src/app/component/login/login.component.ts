@@ -42,8 +42,17 @@ export class LoginComponent {
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
         console.log("User logged in successfully:", response);
+        // Store token and user data in localStorage
+        if (response.token && response.user) {
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('user', JSON.stringify(response.user));
+        } else {
+          console.error('Login response missing token or user data:', response);
+          alert('Login response incomplete. Please try again.');
+          return;
+        }
         //alert("Login successful!");
-        this.router.navigate(['']);
+        this.router.navigate(['']); // Navigate to root route (likely /main)
       },
       error: (error) => {
         console.error("Login error:", error);

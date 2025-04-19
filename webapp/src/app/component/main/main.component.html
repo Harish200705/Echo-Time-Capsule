@@ -1,0 +1,281 @@
+<div class="container">
+  <aside class="sidebar">
+    <img src="assets/logo.png" alt="Logo" class="logo" />
+    <nav>
+      <ul>
+        <li *ngFor="let icon of icons | slice:0:4">
+          <button
+            class="sidebar-btn"
+            (click)="navigateTo(icon.name)"
+            (mouseenter)="hoverIcon(icon.name)"
+            (mouseleave)="unhoverIcon(icon.name)"
+          >
+            <img [src]="icon.isHovered ? icon.hoverSrc : icon.defaultSrc" [alt]="icon.name" class="sidebar-icon" />
+          </button>
+        </li>
+      </ul>
+    </nav>
+    <div class="profile">
+      <button
+        class="sidebar-btn"
+        (click)="navigateTo('profile')"
+        (mouseenter)="hoverIcon('profile')"
+        (mouseleave)="unhoverIcon('profile')"
+      >
+        <img [src]="icons[4].isHovered ? icons[4].hoverSrc : icons[4].defaultSrc" alt="Profile" class="sidebar-icon" />
+      </button>
+    </div>
+  </aside>
+  <main class="content">
+    <section class="header">
+      <span class="username">{{ userName }}</span>
+      <span class="clock">
+        <span>{{ hours }}</span>
+        <span class="separator">:</span>
+        <span>{{ minutes }}</span>
+        <span class="separator">:</span>
+        <span>{{ seconds }}</span>
+      </span>
+    </section>
+    <div class="main-content">
+      <section class="hero">
+        <div class="floating-nav">Quick Access</div>
+        <div class="floating-btn" (click)="openUploadForm('hero')">+</div>
+        <div class="upload-form" *ngIf="showUploadForm && uploadFormType === 'hero'">
+          <form (ngSubmit)="uploadFile('hero')" #heroForm="ngForm">
+            <div class="heroTitle">Upload Memories</div>
+            <div>
+              <label for="heroCapsuleName">Capsule Name:</label>
+              <input
+                type="text"
+                id="heroCapsuleName"
+                [(ngModel)]="heroCapsuleName"
+                name="heroCapsuleName"
+                required
+              />
+            </div>
+            <div>
+              <label for="heroFile">Select File (Image, Video, PDF, MS Word):</label>
+              <input
+                type="file"
+                id="heroFile"
+                (change)="onFileSelected($event, 'hero')"
+                accept="image/*,video/mp4,application/pdf,application/msword"
+                name="heroFile"
+                ngModel
+                required
+              />
+            </div>
+            <div>
+              <label for="heroScheduledOpenDate">Scheduled Open Date (Optional):</label>
+              <input
+                type="date"
+                id="heroScheduledOpenDate"
+                [(ngModel)]="heroScheduledOpenDate"
+                name="heroScheduledOpenDate"
+              />
+            </div>
+            <div>
+              <label for="heroIsPublic">Visibility:</label>
+              <select
+                id="heroIsPublic"
+                [(ngModel)]="heroIsPublic"
+                name="heroIsPublic"
+                required
+              >
+                <option value="false">Private</option>
+                <option value="true">Public</option>
+              </select>
+            </div>
+            <div *ngIf="heroIsPublic === 'false'">
+              <label for="heroPassword">Password (Optional):</label>
+              <input
+                type="password"
+                id="heroPassword"
+                [(ngModel)]="heroPassword"
+                name="heroPassword"
+              />
+            </div>
+            <button type="submit" [disabled]="!heroForm.valid">Create Capsule</button>
+            <button type="button" (click)="closeUploadForm()">Cancel</button>
+          </form>
+        </div>
+        <div class="capsule-list">
+          <div *ngFor="let capsule of heroCapsules" class="capsule-item" [ngClass]="{'locked': !isCapsuleUnlocked(capsule), 'unlocked': isCapsuleUnlocked(capsule)}" (click)="isCapsuleUnlocked(capsule) && openCapsule(capsule)">
+            <div class="capsule-content">
+              <p>Title: {{ capsule.capsuleName || 'Unnamed Capsule' }}</p>
+              <p *ngIf="capsule.scheduledOpenDate">
+                Scheduled Open Date: {{ capsule.scheduledOpenDate | date:'mediumDate' }}
+              </p>
+              <p *ngIf="!capsule.scheduledOpenDate">Scheduled Open Date: None</p>
+            </div>
+            <img *ngIf="!isCapsuleUnlocked(capsule)" src="assets/secured-lock.png" alt="Locked" class="lock-icon" />
+          </div>
+        </div>
+      </section>
+      <div class="right-column">
+        <section class="friends">
+          <div class="friends-text">Friends</div>
+        </section>
+        <section class="Text">
+          <div class="text-title">Text</div>
+          <div class="floating-btn text-btn" (click)="openUploadForm('text')">+</div>
+          <div class="upload-form" *ngIf="showUploadForm && uploadFormType === 'text'">
+            <form (ngSubmit)="uploadFile('text')" #textForm="ngForm">
+              <div class="heroTitle">Upload Memories</div>
+              <div>
+                <label for="textCapsuleName">Title:</label>
+                <input
+                  type="text"
+                  id="textCapsuleName"
+                  [(ngModel)]="textCapsuleName"
+                  name="textCapsuleName"
+                  required
+                />
+              </div>
+              <div>
+                <label for="textContent">Description:</label>
+                <textarea
+                  id="textContent"
+                  [(ngModel)]="textContent"
+                  name="textContent"
+                  rows="5"
+                ></textarea>
+              </div>
+              <div>
+                <label for="textFile">File (Song or Text):</label>
+                <input
+                  type="file"
+                  id="textFile"
+                  (change)="onFileSelected($event, 'text')"
+                  accept="audio/mpeg,text/plain"
+                  name="textFile"
+                  ngModel
+                />
+              </div>
+              <div>
+                <label for="textScheduledOpenDate">Scheduled Open Date (Optional):</label>
+                <input
+                  type="date"
+                  id="textScheduledOpenDate"
+                  [(ngModel)]="textScheduledOpenDate"
+                  name="textScheduledOpenDate"
+                />
+              </div>
+              <div>
+                <label for="textIsPublic">Visibility:</label>
+                <select
+                  id="textIsPublic"
+                  [(ngModel)]="textIsPublic"
+                  name="textIsPublic"
+                  required
+                >
+                  <option value="false">Private</option>
+                  <option value="true">Public</option>
+                </select>
+              </div>
+              <div *ngIf="textIsPublic === 'false'">
+                <label for="textPassword">Password (Optional):</label>
+                <input
+                  type="password"
+                  id="textPassword"
+                  [(ngModel)]="textPassword"
+                  name="textPassword"
+                />
+              </div>
+              <button
+                type="submit"
+                [disabled]="!textForm.valid || (!textContent.trim() && !textSelectedFile)"
+              >
+                Create Capsule
+              </button>
+              <button type="button" (click)="closeUploadForm()">Cancel</button>
+            </form>
+          </div>
+          <div class="capsule-list">
+            <div *ngFor="let capsule of textCapsules" class="capsule-item" [ngClass]="{'locked': !isCapsuleUnlocked(capsule), 'unlocked': isCapsuleUnlocked(capsule)}" (click)="isCapsuleUnlocked(capsule) && openCapsule(capsule)">
+              <div class="capsule-content">
+                <p>Title: {{ capsule.capsuleName || 'Unnamed Capsule' }}</p>
+                <p *ngIf="capsule.scheduledOpenDate">
+                  Scheduled Open Date: {{ capsule.scheduledOpenDate | date:'mediumDate' }}
+                </p>
+                <p *ngIf="!capsule.scheduledOpenDate">Scheduled Open Date: None</p>
+              </div>
+              <img *ngIf="!isCapsuleUnlocked(capsule)" src="assets/secured-lock.png" alt="Locked" class="lock-icon" />
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <div class="floating-window" *ngIf="showFloatingWindow">
+    <div class="floating-window-content">
+      <h4>{{ selectedCapsule?.capsuleName || 'Unnamed Capsule' }}</h4>
+      <p *ngIf="selectedCapsule?.scheduledOpenDate">
+        Scheduled Open Date: {{ selectedCapsule.scheduledOpenDate | date:'mediumDate' }}
+      </p>
+      <p *ngIf="!selectedCapsule?.scheduledOpenDate">Scheduled Open Date: None</p>
+      <p>Visibility: {{ selectedCapsule?.isPublic ? 'Public' : 'Private' }}</p>
+      <div *ngIf="selectedCapsule?.safeFileUrl">
+        <a [href]="selectedCapsule.safeFileUrl" [download]="selectedCapsule.capsuleName || 'capsule'">Download File</a>
+        <div *ngIf="selectedCapsule.fileType === 'image'">
+          <img [src]="selectedCapsule.safeFileUrl" alt="Capsule Image" style="max-width: 100%; height: auto;" />
+        </div>
+        <div *ngIf="selectedCapsule.fileType === 'video'">
+          <video controls [src]="selectedCapsule.safeFileUrl" style="max-width: 100%; height: auto;"></video>
+        </div>
+        <div *ngIf="selectedCapsule.fileType === 'mp3'">
+          <audio controls [src]="selectedCapsule.safeFileUrl" style="width: 100%;"></audio>
+        </div>
+        <div *ngIf="selectedCapsule.fileType === 'pdf'">
+          <iframe [src]="selectedCapsule.safeFileUrl" style="width: 100%; height: 500px; border: none;" title="PDF Preview"></iframe>
+        </div>
+      </div>
+      <div *ngIf="selectedCapsule?.fileType === 'doc' && selectedCapsule?.safeFileUrl">
+        <p>MS Word documents cannot be previewed in the browser.</p>
+        <a [href]="selectedCapsule.safeFileUrl" [download]="selectedCapsule.capsuleName || 'document.doc'">Download Document</a>
+      </div>
+      <div *ngIf="selectedCapsule?.fileType === 'text' && selectedCapsule?.decodedTextContent">
+        <pre style="white-space: pre-wrap; max-height: 400px; overflow-y: auto;">{{ selectedCapsule.decodedTextContent }}</pre>
+      </div>
+      <div *ngIf="!selectedCapsule?.safeFileUrl && !selectedCapsule?.decodedTextContent">
+        <p>No content available for this capsule.</p>
+      </div>
+      <div class="button-group">
+        <button class="delete-btn" (click)="deleteCapsule(selectedCapsule.id)">Delete</button>
+        <button class="cancel-btn" (click)="closeFloatingWindow()">Close</button>
+      </div>
+    </div>
+  </div>
+  <div class="floating-window" *ngIf="showPasswordWindow">
+    <div class="floating-window-content small-window">
+      <h4>Enter Capsule Password</h4>
+      <form (ngSubmit)="submitPassword()" #passwordForm="ngForm">
+        <div>
+          <label for="passwordInput">Password:</label>
+          <input
+            type="password"
+            id="passwordInput"
+            [(ngModel)]="passwordInput"
+            name="passwordInput"
+            required
+          />
+        </div>
+        <div class="button-group">
+          <button type="submit" [disabled]="!passwordForm.valid">Submit</button>
+          <button type="button" (click)="cancelPassword()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="floating-window" *ngIf="showDeleteWindow">
+    <div class="floating-window-content small-window">
+      <h4>Confirm Deletion</h4>
+      <p>Are you sure you want to delete this capsule? This action cannot be undone.</p>
+      <div class="button-group">
+        <button class="delete-btn" (click)="confirmDelete()">Delete</button>
+        <button class="cancel-btn" (click)="cancelDelete()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

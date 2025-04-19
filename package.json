@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "mongoose-gridfs": "^1.3.0"
+  }
+}

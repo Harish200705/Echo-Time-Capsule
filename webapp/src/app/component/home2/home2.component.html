@@ -5,21 +5,21 @@
       <img src="assets/logo.png" alt="Logo" class="logo" />
       <span class="site-name">Echo</span>
     </div>
-
-    <ul class="nav-links">
-      <li><a href="#">Home</a></li>
-      <li><a href="#">About</a></li>
-      <li><a href="#">Services</a></li>
-      <li><a href="#">Contact</a></li>
-    </ul>
-
+  
+    <div class="nav-buttons1">
+      <button class="nav-btn" (click)="navigateTo('main')">Home</button>
+      <button class="nav-btn" (click)="navigateTo('about')">About</button>
+      <button class="nav-btn" (click)="navigateTo('services')">Services</button>
+      <button class="nav-btn" (click)="navigateTo('contact')">Contact</button>
+    </div>
+  
     <div class="nav-buttons">
       @if (!isLoggedIn) {
-          <button class="btn" (click)="goToLogin()">Login</button>
+        <button class="btn" (click)="goToLogin()">Login</button>
       } @else {
-          <button class="btn" (click)="goToAccount()">Account</button>
+        <button class="btn" (click)="goToAccount()">Account</button>
       }
-  </div>
+    </div>
   </nav>
 
   <div class="scroll-content"></div>
