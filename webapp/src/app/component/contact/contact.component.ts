@@ -18,7 +18,7 @@ export class ContactComponent implements OnInit {
   queryMessage: string = '';
   errorMessage: string | null = null;
   successMessage: string | null = null;
-  private backendUrl: string = 'http://localhost:3000';
+  private backendUrl: string = 'https://echo-backend-ty41.onrender.com';
   private debugMode: boolean = true;
 
   constructor(
