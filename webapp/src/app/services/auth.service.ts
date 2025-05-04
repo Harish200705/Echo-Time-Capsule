@@ -1,15 +1,30 @@
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = environment.apiUrl + '/user/register';
+  private apiUrl = environment.apiUrl;
+  private authStatus = new BehaviorSubject<boolean>(false);
+  authStatus$ = this.authStatus.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.authStatus.next(!!localStorage.getItem('token'));
+    }
+  }
+
+  private isBrowser(): boolean {
+    return isPlatformBrowser(this.platformId);
+  }
 
   register(userData: {
     name: string;
@@ -20,79 +35,139 @@ export class AuthService {
     gender: string;
     phone: string;
   }): Observable<any> {
-    return this.http.post(environment.apiUrl + '/user/register', userData);
+    console.log('[INFO] Registering user:', { email: userData.email, name: userData.name });
+    return this.http.post(`${this.apiUrl}/user/register`, userData, { observe: 'response' }).pipe(
+      tap((response) => {
+        console.log('[INFO] Registration response:', response.body);
+      }),
+      catchError((error) => {
+        console.error('[ERROR] Registration failed:', {
+          status: error.status,
+          statusText: error.statusText,
+          url: error.url,
+          message: error.message,
+          error: error.error
+        });
+        const errorMessage = error.status === 404
+          ? 'Registration service unavailable'
+          : error.error?.message || 'An error occurred during registration';
+        return throwError(() => new Error(errorMessage));
+      })
+    );
   }
 
   login(userData: {
     email: string;
     password: string;
   }): Observable<any> {
-    return this.http.post(environment.apiUrl + '/user/login', userData);
+    console.log('[INFO] Logging in user:', { email: userData.email });
+    return this.http.post(`${this.apiUrl}/user/login`, userData).pipe(
+      tap((response: any) => {
+        this.handleLoginResponse(response);
+      }),
+      catchError((error) => {
+        console.error('[ERROR] Login failed:', {
+          status: error.status,
+          statusText: error.statusText,
+          url: error.url,
+          message: error.message,
+          error: error.error
+        });
+        return throwError(error);
+      })
+    );
   }
 
-  // New method to handle login response
   handleLoginResponse(response: any): void {
     if (response.token && response.user) {
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('user', JSON.stringify(response.user));
+      if (this.isBrowser()) {
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify({
+          id: response.user.id.toString(),
+          name: response.user.name,
+          email: response.user.email,
+          isAdmin: response.user.isAdmin,
+          profilePhotoUrl: response.user.profilePhotoUrl
+        }));
+      }
+      this.authStatus.next(true);
     } else {
+      this.logout(); // Clear any stale data on invalid response
       throw new Error('Invalid login response: missing token or user data');
     }
   }
 
+  get isLoggedIn(): boolean {
+    return this.isBrowser() ? !!localStorage.getItem('token') : false;
+  }
+
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('token');
+    return this.isBrowser() ? !!localStorage.getItem('token') : false;
   }
 
   getToken(): string | null {
-    return localStorage.getItem('token');
-  }
-
-  get isLoggedIn(): boolean {
-    let token = localStorage.getItem('token');
-    if (token) {
-      return true;
-    }
-    return false;
+    return this.isBrowser() ? localStorage.getItem('token') : null;
   }
 
   get isAdmin(): boolean {
-    let userData = localStorage.getItem('user');
-    if (userData) {
-      return JSON.parse(userData).isAdmin;
-    }
-    return false;
+    if (!this.isBrowser()) return false;
+    const userData = localStorage.getItem('user');
+    return userData ? JSON.parse(userData).isAdmin : false;
   }
 
   get userName(): string | null {
-    let userData = localStorage.getItem('user');
-    if (userData) {
-      return JSON.parse(userData).name;
-    }
-    return null;
+    if (!this.isBrowser()) return null;
+    const userData = localStorage.getItem('user');
+    return userData ? JSON.parse(userData).name : null;
   }
 
   get userEmail(): string | null {
-    let userData = localStorage.getItem('user');
-    if (userData) {
-      return JSON.parse(userData).email;
-    }
-    return null;
+    if (!this.isBrowser()) return null;
+    const userData = localStorage.getItem('user');
+    return userData ? JSON.parse(userData).email : null;
+  }
+
+  get userProfilePhoto(): string | null {
+    if (!this.isBrowser()) return null;
+    const userData = localStorage.getItem('user');
+    return userData ? JSON.parse(userData).profilePhotoUrl || null : null;
   }
 
   onForgetPassword(email: string, newPassword: string): Observable<any> {
-    return this.http.post(environment.apiUrl + '/user/forgot-password', { email, newPassword });
+    console.log('[INFO] Requesting password reset:', { email, newPassword });
+    return this.http.post(`${this.apiUrl}/user/forgot-password`, { email, newPassword }).pipe(
+      tap((response) => {
+        console.log('[INFO] Password reset response:', response);
+      }),
+      catchError((error) => {
+        console.error('[ERROR] Password reset failed:', {
+          status: error.status,
+          statusText: error.statusText,
+          url: error.url,
+          message: error.message,
+          error: error.error
+        });
+        return throwError(() => error); // Preserve original error
+      })
+    );
   }
 
   logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    if (this.isBrowser()) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    }
+    this.authStatus.next(false);
+    console.log('[INFO] User logged out');
   }
 
   getUser(): any {
-    let userData = localStorage.getItem('user');
+    if (!this.isBrowser()) return null;
+    const userData = localStorage.getItem('user');
     if (userData) {
-      return JSON.parse(userData);
+      const parsed = JSON.parse(userData);
+      parsed.id = parsed.id.toString();
+      return parsed;
     }
     return null;
   }

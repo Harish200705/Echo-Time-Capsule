@@ -13,6 +13,7 @@ class CapsuleHandler {
         filePath: data.filePath,
         isPublic: data.isPublic,
         hasPassword: !!data.password,
+        scheduledOpenDate: data.scheduledOpenDate,
       });
 
       if (data.password) {
@@ -36,17 +37,23 @@ class CapsuleHandler {
         isPublic: capsule.isPublic,
         userId: capsule.userId,
         textContent: capsule.textContent,
+        password: capsule.password ? true : false,
+        collaborators: capsule.collaborators || [],
       };
     } catch (error) {
       console.error('[ERROR] Error creating capsule:', error.message);
-      throw error;
+      throw new Error(`Failed to create capsule: ${error.message}`);
     }
   }
 
   async getCapsules(userId) {
     try {
       const capsules = await Capsule.find({
-        $or: [{ userId }, { isPublic: true }],
+        $or: [
+          { userId: userId }, // Owned by the user
+          { isPublic: true }, // Public capsules
+          { collaborators: userId } // Capsules where user is a collaborator
+        ]
       });
       console.log('[INFO] Retrieved capsules:', { userId, count: capsules.length });
       return capsules.map((capsule) => ({
@@ -60,18 +67,19 @@ class CapsuleHandler {
         scheduledOpenDate: capsule.scheduledOpenDate,
         isPublic: capsule.isPublic,
         userId: capsule.userId,
-        password: capsule.password,
+        password: capsule.password ? true : false,
         textContent: capsule.textContent,
+        collaborators: capsule.collaborators || [],
       }));
     } catch (error) {
       console.error('[ERROR] Error fetching capsules:', error.message);
-      throw error;
+      throw new Error(`Failed to fetch capsules: ${error.message}`);
     }
   }
 
-  async getCapsuleById(capsuleId, userId, password) {
+  async getCapsuleById(capsuleId, userId, password, operation = 'read') {
     try {
-      console.log('[INFO] Fetching capsule:', { capsuleId, userId, hasPassword: !!password });
+      console.log('[INFO] Fetching capsule:', { capsuleId, userId, hasPassword: !!password, operation });
       const capsule = await Capsule.findById(capsuleId);
       if (!capsule) {
         console.warn('[WARN] Capsule not found:', { capsuleId });
@@ -84,9 +92,11 @@ class CapsuleHandler {
       const now = new Date();
       const isScheduledOpen =
         !capsule.scheduledOpenDate || now >= new Date(capsule.scheduledOpenDate);
+      const isCollaborator = capsule.collaborators && capsule.collaborators.includes(userId);
 
-      if (isOwner && isScheduledOpen) {
-        console.log('[INFO] Capsule access granted to owner:', { capsuleId });
+      // Allow access for owners and collaborators (even if locked for delete operation)
+      if (isOwner || (isCollaborator && operation === 'delete')) {
+        console.log('[INFO] Capsule access granted to owner or collaborator:', { capsuleId, userId, isOwner, isCollaborator });
         return {
           id: capsule._id,
           capsuleName: capsule.capsuleName,
@@ -99,20 +109,23 @@ class CapsuleHandler {
           isPublic: capsule.isPublic,
           userId: capsule.userId,
           textContent: capsule.textContent,
+          password: capsule.password ? true : false,
+          collaborators: capsule.collaborators || [],
         };
       }
 
-      if (!isPublic) {
-        console.warn('[WARN] Capsule is private:', { capsuleId });
-        return { error: 'Capsule is private' };
-      }
-
-      if (!isScheduledOpen) {
+      // Lock check for non-delete operations
+      if (operation !== 'delete' && !isScheduledOpen) {
         console.warn('[WARN] Capsule is not yet open:', {
           capsuleId,
           scheduledOpenDate: capsule.scheduledOpenDate,
         });
         return { error: 'Capsule is not yet open' };
+      }
+
+      if (!isPublic && !isCollaborator) {
+        console.warn('[WARN] Capsule is private and user is not a collaborator:', { capsuleId });
+        return { error: 'Capsule is private' };
       }
 
       if (hasPassword && !password) {
@@ -142,10 +155,12 @@ class CapsuleHandler {
         isPublic: capsule.isPublic,
         userId: capsule.userId,
         textContent: capsule.textContent,
+        password: capsule.password ? true : false,
+        collaborators: capsule.collaborators || [],
       };
     } catch (error) {
       console.error('[ERROR] Error fetching capsule by ID:', error.message);
-      throw error;
+      throw new Error(`Failed to fetch capsule: ${error.message}`);
     }
   }
 }

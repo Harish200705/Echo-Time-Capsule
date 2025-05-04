@@ -11,7 +11,7 @@ const capsuleSchema = new mongoose.Schema({
     required: true,
   },
   filePath: {
-    type: String, // Path to file on filesystem (nullable for text capsules without a file)
+    type: String,
   },
   fileType: {
     type: String,
@@ -31,7 +31,7 @@ const capsuleSchema = new mongoose.Schema({
     default: Date.now,
   },
   scheduledOpenDate: {
-    type: Date, // Nullable for optional scheduling
+    type: Date,
   },
   isPublic: {
     type: Boolean,
@@ -43,13 +43,34 @@ const capsuleSchema = new mongoose.Schema({
   textContent: {
     type: String,
   },
-});
+  collaborators: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }],
+  collaborationRequests: [{
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    status: { type: String, enum: ['pending', 'accepted', 'rejected'], default: 'pending' }
+  }]
+}, { timestamps: true });
 
 capsuleSchema.set('toJSON', {
   transform: function (doc, ret) {
     ret.id = ret._id;
     delete ret._id;
     delete ret.__v;
+
+    if (ret.userId) {
+      ret.userId = ret.userId.toString();
+    }
+    if (ret.collaborators) {
+      ret.collaborators = ret.collaborators.map(id => id.toString());
+    }
+    if (ret.collaborationRequests) {
+      ret.collaborationRequests = ret.collaborationRequests.map(req => ({
+        ...req,
+        userId: req.userId.toString()
+      }));
+    }
     return ret;
   },
 });
@@ -59,6 +80,19 @@ capsuleSchema.set('toObject', {
     ret.id = ret._id;
     delete ret._id;
     delete ret.__v;
+
+    if (ret.userId) {
+      ret.userId = ret.userId.toString();
+    }
+    if (ret.collaborators) {
+      ret.collaborators = ret.collaborators.map(id => id.toString());
+    }
+    if (ret.collaborationRequests) {
+      ret.collaborationRequests = ret.collaborationRequests.map(req => ({
+        ...req,
+        userId: req.userId.toString()
+      }));
+    }
     return ret;
   },
 });

@@ -1,0 +1,36 @@
+<div class="contact-container">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="navbar-actions">
+        <button class="back-btn" (click)="goBack()" aria-label="Go Back">
+          <img src="/assets/back.png" alt="Back Icon" class="back-icon" />
+        </button>
+        <button class="signout-btn" (click)="signOut()">Sign Out</button>
+      </div>
+    </nav>
+    <!-- Header Section -->
+    <div class="background-section">
+      <img src="/assets/support-bg.JPG" alt="Support Background" class="background-image" />
+      <h1>Give Feedback or Ask a Query</h1>
+    </div>
+    <!-- Form Section -->
+    <div class="form-section">
+      <form>
+        <div class="form-group">
+          <label for="queryMessage">Your Query or Feedback</label>
+          <textarea
+            id="queryMessage"
+            [(ngModel)]="queryMessage"
+            name="queryMessage"
+            placeholder="Type your query or feedback here..."
+            rows="6"
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <button type="button" (click)="submitQuery()">Submit</button>
+        </div>
+        <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+        <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+      </form>
+    </div>
+  </div>

@@ -3,7 +3,7 @@
         <!-- Slideshow on the left -->
         <div class="container">
             <div class="wrapper">
-                <img src="assets/slider-img/img-1.jpeg" alt="error">
+                <img src="assets/slider-img/img-1.jpeg" alt="Slideshow Image">
             </div>
         </div>
         
@@ -16,6 +16,9 @@
 
             <div class="form-group">
                 <h2 class="signup">Signup</h2>
+                @if (generalError) {
+                    <small class="error">{{ generalError }}</small>
+                }
             </div>
 
             <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
@@ -26,14 +29,20 @@
                     @if (registerForm.controls['name'].invalid && registerForm.controls['name'].touched) {
                         <small class="error">Name is required.</small>
                     }
+                    @if (usernameError) {
+                        <small class="error">{{ usernameError }}</small>
+                    }
                 </div>
 
                 <!-- Email -->
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="email" formControlName="email" placeholder="Enter your email" size="103" >
+                    <input type="email" formControlName="email" placeholder="Enter your email" size="103">
                     @if (registerForm.controls['email'].invalid && registerForm.controls['email'].touched) {
                         <small class="error">Enter a valid email address.</small>
+                    }
+                    @if (emailError) {
+                        <small class="error">{{ emailError }}</small>
                     }
                 </div>
 
@@ -49,11 +58,6 @@
                     }
                 </div>
 
-                <!-- Admin Checkbox -->
-                <div class="form-group checkbox-group">
-                    <input type="checkbox" formControlName="isAdmin">
-                    <label>Admin</label>
-                </div>
 
                 <!-- Date of Birth -->
                 <div class="form-group">

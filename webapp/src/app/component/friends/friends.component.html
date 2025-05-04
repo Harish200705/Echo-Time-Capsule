@@ -1,1 +1,132 @@
-<p>friends works!</p>
+<div class="container">
+  <img src="assets/friends-bg.jpg" class="container-bg" alt="Background Image">
+  <aside class="sidebar">
+    <button
+      class="sidebar-btn logo-btn"
+      (click)="moveTo('home')"
+    >
+      <img [src]="isLogoHovered ? '/assets/logo-hover.png' : '/assets/logo.png'" alt="Logo" class="logo-icon" />
+    </button>
+    <nav>
+      <ul>
+        <li *ngFor="let icon of icons | slice:0:4">
+          <button
+            class="sidebar-btn"
+            (click)="navigateTo(icon.name)"
+            (mouseenter)="hoverIcon(icon.name)"
+            (mouseleave)="unhoverIcon(icon.name)"
+            [title]="icon.name | titlecase"
+          >
+            <img [src]="icon.isHovered ? icon.hoverSrc : icon.defaultSrc" [alt]="icon.name" class="sidebar-icon" />
+          </button>
+        </li>
+      </ul>
+    </nav>
+    <div class="profile">
+      <button
+        class="sidebar-btn"
+        (click)="navigateTo('profile')"
+        (mouseenter)="hoverIcon('profile')"
+        (mouseleave)="unhoverIcon('profile')"
+        title="Profile"
+      >
+        <img [src]="icons[4].isHovered ? icons[4].hoverSrc : icons[4].defaultSrc" alt="Profile" class="sidebar-icon" />
+      </button>
+    </div>
+  </aside>
+  <main class="hero-section">
+    <div class="hero-title">
+      <span>Friends</span>
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
+    <section class="friends">
+      <hr />
+      <div class="friends-columns">
+        <div class="search-section">
+          <h3 for="searchInput">Search Users:</h3>
+          <input
+            type="text"
+            id="searchInput"
+            [(ngModel)]="searchQuery"
+            (input)="onSearchInput(searchQuery)"
+            placeholder="Enter name or email"
+            [disabled]="isLoading"
+          />
+          <div *ngIf="isLoading" class="loading">Loading...</div>
+          <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+          <div class="search-results" *ngIf="searchResults.length > 0">
+            <div *ngFor="let user of searchResults; trackBy: trackByUserId" class="search-result-item">
+              <div class="user-info">
+                <img
+                  [src]="user.profilePhotoUrl || 'assets/default-profile.png'"
+                  [alt]="user.name + ' profile photo'"
+                  class="profile-photo"
+                />
+                <span>{{ user.name }} ({{ user.email }})</span>
+              </div>
+              <ng-container *ngIf="user.id === currentUserId; else friendButton">
+                <span class="myself">(myself)</span>
+              </ng-container>
+              <ng-template #friendButton>
+                <ng-container *ngIf="isFriend(user.id)">
+                  <button class="add-friend-btn" disabled>Already Friends</button>
+                </ng-container>
+                <ng-container *ngIf="!isFriend(user.id) && isRequestPending(user.id)">
+                  <button class="revoke-request-btn" (click)="revokeFriendRequest(user.id)">Revoke Request</button>
+                </ng-container>
+                <ng-container *ngIf="!isFriend(user.id) && !isRequestPending(user.id)">
+                  <button class="add-friend-btn" (click)="sendFriendRequest(user.id)">Add Friend</button>
+                </ng-container>
+              </ng-template>
+            </div>
+          </div>
+          <p *ngIf="searchResults.length === 0 && searchQuery && !isLoading && !errorMessage" class="no-results">
+            No users found.
+          </p>
+        </div>
+        <div class="friends-list">
+          <h3>My Friends</h3>
+          <div *ngIf="friends.length === 0" class="no-friends">
+            No friends yet.
+          </div>
+          <div *ngFor="let friend of friends; trackBy: trackByUserId" class="friend-item">
+            <div class="user-info">
+              <img
+                [src]="friend.profilePhotoUrl || 'assets/default-profile.png'"
+                [alt]="friend.name + ' profile photo'"
+                class="profile-photo"
+              />
+              <span>{{ friend.name }} ({{ friend.email }})</span>
+            </div>
+            <button class="remove-friend-btn" (click)="removeFriend(friend.id)">Remove</button>
+          </div>
+        </div>
+      </div>
+      <hr />
+      <div class="requests-section">
+        <h3>Friend Requests</h3>
+        <div *ngIf="friendRequests.length === 0" class="no-requests">
+          No pending friend requests.
+        </div>
+        <div *ngFor="let request of friendRequests" class="request-item">
+          <div class="request-info">
+            <img
+              [src]="request.requesterProfilePhotoUrl || 'assets/default-profile.png'"
+              [alt]="request.requesterName + ' profile photo'"
+              class="profile-photo"
+            />
+            <p>{{ request.requesterName }} sent you a friend request.</p>
+          </div>
+          <div class="request-actions">
+            <button class="accept-btn" (click)="acceptFriendRequest(request.id)">
+              Accept
+            </button>
+            <button class="decline-btn" (click)="declineFriendRequest(request.id)">
+              Decline
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>

@@ -15,6 +15,9 @@ import { CommonModule } from '@angular/common';
 export class RegisterComponent {
   passwordFieldType: string = 'password';
   registerForm: FormGroup;
+  usernameError: string | null = null;
+  emailError: string | null = null;
+  generalError: string | null = null;
 
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
@@ -25,7 +28,7 @@ export class RegisterComponent {
       name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      isAdmin: [false], 
+      isAdmin: [false],
       dob: ['', [Validators.required]],
       gender: ['', [Validators.required]],
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]]
@@ -36,20 +39,38 @@ export class RegisterComponent {
     this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
   }
 
+  resetErrors(): void {
+    this.usernameError = null;
+    this.emailError = null;
+    this.generalError = null;
+  }
+
   onSubmit() {
     if (this.registerForm.invalid) {
-      return; // Form errors will be shown in UI
+      this.registerForm.markAllAsTouched();
+      return;
     }
 
-    console.log("Sending registration request:", this.registerForm.value);
+    this.resetErrors();
+    console.log('[INFO] Sending registration request:', this.registerForm.value);
 
     this.authService.register(this.registerForm.value).subscribe({
       next: (response) => {
-        console.log("User registered successfully:", response);
+        console.log('[INFO] User registered successfully:', response.body);
         this.router.navigate(['/login']);
       },
       error: (error) => {
-        console.error("Registration error:", error);
+        console.error('[ERROR] Registration error:', error);
+        const errorMessage = error.message || 'An error occurred during registration';
+        if (error.status === 409) {
+          if (errorMessage.includes('Username')) {
+            this.usernameError = 'Username already exists. Please choose a different one.';
+          } else if (errorMessage.includes('Email')) {
+            this.emailError = 'Email already exists. Please use a different email.';
+          }
+        } else {
+          this.generalError = errorMessage;
+        }
       }
     });
   }

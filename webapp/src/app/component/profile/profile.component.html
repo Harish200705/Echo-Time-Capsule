@@ -1,0 +1,176 @@
+<div class="container">
+  <img src="assets/profile-bg.jpg" class="container-bg" alt="Background Image">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <button
+      class="sidebar-btn logo-btn"
+      (click)="moveTo('home')"
+    >
+      <img [src]="isLogoHovered ? '/assets/logo-hover.png' : '/assets/logo.png'" alt="Logo" class="logo-icon" />
+    </button>
+    <nav>
+      <ul>
+        <li *ngFor="let icon of icons | slice:0:4">
+          <button
+            class="sidebar-btn"
+            (click)="navigateTo(icon.name)"
+            (mouseenter)="hoverIcon(icon.name)"
+            (mouseleave)="unhoverIcon(icon.name)"
+            [title]="icon.name | titlecase"
+          >
+            <img [src]="icon.isHovered ? icon.hoverSrc : icon.defaultSrc" [alt]="icon.name" class="sidebar-icon" />
+          </button>
+        </li>
+      </ul>
+    </nav>
+    <div class="profile">
+      <button
+        class="sidebar-btn"
+        (click)="navigateTo('profile')"
+        (mouseenter)="hoverIcon('profile')"
+        (mouseleave)="unhoverIcon('profile')"
+        title="Profile"
+      >
+        <img [src]="icons[4].isHovered ? icons[4].hoverSrc : icons[4].defaultSrc" alt="Profile" class="sidebar-icon" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Hero Section (Merged Content and Main Content) -->
+  <div class="hero-section">
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <div class="background-bar">
+        <img src="/assets/img-3.jpg" alt="Rainbow Background" class="rainbow-bg" />
+      </div>
+      <div class="profile-info">
+        <div class="profile-photo">
+          <img
+            [src]="(user?.profilePhotoUrl && user.profilePhotoUrl !== '') ? user.profilePhotoUrl : '/assets/profile-2.png'"
+            alt="Profile Photo"
+            class="profile-img"
+          />
+        </div>
+        <div class="username-section">
+          <span class="username">{{ userName || 'Unknown User' }}</span>
+        </div>
+        <div class="stats">
+          <span class="stat">{{ capsuleCount }} Capsules</span>
+          <span class="stat">{{ friendCount }} Friends</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Details -->
+    <div class="profile-details">
+      <!-- User Details or Edit Form -->
+      <div class="profile-info" *ngIf="!isEditing">
+        <div class="info-row-container">
+          <span class="info-label">Name:</span>
+          <div class="info-value-box">
+            <span class="info-value">{{ userName || 'N/A' | titlecase }}</span>
+          </div>
+        </div>
+        <div class="info-row-container">
+          <span class="info-label">Date of Birth:</span>
+          <div class="info-value-box">
+            <span class="info-value">{{ dob ? (user.dob | date:'mediumDate') : 'N/A' | titlecase }}</span>
+          </div>
+        </div>
+        <div class="info-row-container">
+          <span class="info-label">Gender:</span>
+          <div class="info-value-box">
+            <span class="info-value">{{ gender || 'N/A' | titlecase }}</span>
+          </div>
+        </div>
+        <div class="info-row-container">
+          <span class="info-label">Phone:</span>
+          <div class="info-value-box">
+            <span class="info-value">{{ phone || 'N/A' | titlecase }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit Form (inline within info-row) -->
+      <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="profile-form" *ngIf="isEditing">
+        <div class="info-row-container">
+          <span class="info-label">Name:</span>
+          <div class="info-value-box" [attr.contenteditable]="isEditing" (input)="onValueChange('name', $event)">
+            {{ userName || 'N/A' }}
+          </div>
+        </div>
+        <div class="info-row-container">
+          <span class="info-label">Date of Birth:</span>
+          <div class="info-value-box">
+            <input id="dob" type="date" formControlName="dob" />
+            <div class="error-container" *ngIf="profileForm.get('dob')?.invalid && (profileForm.get('dob')?.dirty || profileForm.get('dob')?.touched)">
+              <span class="error" *ngIf="profileForm.get('dob')?.errors?.['required']">Date of Birth is required</span>
+            </div>
+          </div>
+        </div>
+        <div class="info-row-container">
+          <span class="info-label">Gender:</span>
+          <div class="info-value-box">
+            <select id="gender" formControlName="gender">
+              <option value="" disabled>Select gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+            <div class="error-container" *ngIf="profileForm.get('gender')?.invalid && (profileForm.get('gender')?.dirty || profileForm.get('gender')?.touched)">
+              <span class="error" *ngIf="profileForm.get('gender')?.errors?.['required']">Gender is required</span>
+            </div>
+          </div>
+        </div>
+        <div class="info-row-container">
+          <span class="info-label">Phone:</span>
+          <div class="info-value-box" [attr.contenteditable]="isEditing" (input)="onValueChange('phone', $event)">
+            {{ phone || 'N/A' }}
+          </div>
+        </div>
+        <div class="form-button-group">
+          <button type="submit" [disabled]="profileForm.invalid || !profileForm.dirty">Save Changes</button>
+          <button type="button" (click)="cancelEdit()">Cancel</button>
+        </div>
+        <div class="error-container" *ngIf="errorMessage">
+          <span class="error">{{ errorMessage }}</span>
+        </div>
+      </form>
+
+      <!-- Update Profile and Upload Photo Buttons -->
+      <div class="button-group" *ngIf="!isEditing">
+        <button class="update-profile-btn" (click)="startEdit()">Update Profile</button>
+        <button class="upload-photo-btn" (click)="openPhotoUpload()">Upload Photo</button>
+      </div>
+    </div>
+
+    <!-- Floating Window for Photo Upload -->
+    <div class="floating-window" *ngIf="showPhotoUpload">
+      <div class="floating-window-content small-window">
+        <h4>Upload Profile Photo</h4>
+        <form [formGroup]="photoForm" (ngSubmit)="uploadPhoto()" class="photo-upload-form">
+          <div class="form-group">
+            <label for="photo">Choose Photo</label>
+            <input
+              id="photo"
+              type="file"
+              accept="image/*"
+              (change)="onPhotoSelected($event)"
+              formControlName="photo"
+            />
+            <div class="error-container" *ngIf="photoForm.get('photo')?.invalid && (photoForm.get('photo')?.dirty || photoForm.get('photo')?.touched)">
+              <span class="error" *ngIf="photoForm.get('photo')?.errors?.['required']">Please select an image</span>
+            </div>
+          </div>
+          <div class="button-group">
+            <button type="submit" [disabled]="!selectedPhoto">Upload</button>
+            <button type="button" class="cancel-btn" (click)="closePhotoUpload()">Cancel</button>
+          </div>
+          <div class="error-container" *ngIf="errorMessage">
+            <span class="error">{{ errorMessage }}</span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

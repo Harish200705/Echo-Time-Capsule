@@ -24,7 +24,7 @@ export class Home2Component implements OnInit, AfterViewInit {
   isBrowser: boolean;
   hasShuffled: boolean = false;
   isLoggedIn: boolean = false;
-
+  isDropdownVisible: boolean = false;
 
   steps: string[] = [
     "Step 1: Create your capsule.",
@@ -38,20 +38,27 @@ export class Home2Component implements OnInit, AfterViewInit {
   @ViewChild('gradientCircle', { static: false }) gradientCircle!: ElementRef;
   @ViewChild('revealText', { static: false }) revealText!: ElementRef;
 
-
   router = inject(Router);
 
-  constructor(@Inject(PLATFORM_ID) private platformId: object, private el: ElementRef, private authService: AuthService) {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private el: ElementRef,
+    private authService: AuthService
+  ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
     this.revealedSteps = this.steps.map(() => '');
     this.revealedText = this.textToReveal.split('').map(() => '');
   }
 
-  
   ngOnInit() {
     if (this.isBrowser) {
-      this.revealOnScroll();
       this.isLoggedIn = this.authService.isAuthenticated();
+      console.log('[DEBUG] Initial isLoggedIn:', this.isLoggedIn);
+      this.authService.authStatus$.subscribe((status: boolean) => {
+        this.isLoggedIn = status;
+        console.log('Auth status updated:', status);
+      });
+      this.revealOnScroll();
     }
   }
 
@@ -104,6 +111,15 @@ export class Home2Component implements OnInit, AfterViewInit {
     this.revealOnScroll();
   }
 
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.isBrowser || !this.isDropdownVisible) return;
+    const target = event.target as HTMLElement;
+    if (!target.closest('.nav-buttons')) {
+      this.closeDropdown();
+    }
+  }
+
   private revealOnScroll() {
     const section = this.el.nativeElement.querySelector('.website-content');
     if (section) {
@@ -117,21 +133,58 @@ export class Home2Component implements OnInit, AfterViewInit {
   }
 
   goToLogin(): void {
-    console.log('Navigating to signup...');
+    console.log('Navigating to login...');
     this.router.navigate(['/login']);
+    this.closeDropdown();
   }
 
   goToAccount(): void {
-    console.log('Navigating to signup...');
-    this.router.navigate(['/main']);
+    console.log('Toggling account dropdown...');
+    this.toggleDropdown();
   }
 
-  goToMain(): void {
-    console.log('Navigating to main');
+  toggleDropdown(): void {
+    this.isDropdownVisible = !this.isDropdownVisible;
+    if (this.isDropdownVisible && this.isBrowser) {
+      gsap.fromTo('.account-dropdown', 
+        { opacity: 0, y: -10 }, 
+        { opacity: 1, y: 0, duration: 0.3 }
+      );
+    }
+  }
+
+  closeDropdown(): void {
+    if (this.isDropdownVisible && this.isBrowser) {
+      gsap.to('.account-dropdown', {
+        opacity: 0,
+        y: -10,
+        duration: 0.3,
+        onComplete: () => {
+          this.isDropdownVisible = false;
+        }
+      });
+    } else {
+      this.isDropdownVisible = false;
+    }
+  }
+
+  goToProfile(): void {
+    console.log('Navigating to profile...');
+    this.router.navigate(['/profile']);
+    this.closeDropdown();
+  }
+
+  logout(): void {
+    console.log('Logging out...');
+    this.authService.logout();
+    this.isLoggedIn = false;
     this.router.navigate(['/main']);
+    this.closeDropdown();
   }
 
   navigateTo(route: string): void {
+    console.log(`Navigating to ${route}...`);
     this.router.navigate([`/${route}`]);
+    this.closeDropdown();
   }
 }

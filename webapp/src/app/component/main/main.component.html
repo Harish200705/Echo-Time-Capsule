@@ -1,6 +1,19 @@
 <div class="container">
+  <div *ngIf="showCongratsMessage" class="congrats-overlay"></div>
+
+  <!-- Congratulatory message -->
+  <div *ngIf="showCongratsMessage" class="congrats-message">
+    {{ congratsMessage }}
+  </div>
+
+  <img src="assets/main-bg.jpg" class="container-bg" alt="Background Image">
   <aside class="sidebar">
-    <img src="assets/logo.png" alt="Logo" class="logo" />
+    <button
+      class="sidebar-btn logo-btn"
+      (click)="moveTo('home')"
+    >
+      <img [src]="isLogoHovered ? '/assets/logo-hover.png' : '/assets/logo.png'" alt="Logo" class="logo-icon" />
+    </button>
     <nav>
       <ul>
         <li *ngFor="let icon of icons | slice:0:4">
@@ -27,15 +40,13 @@
     </div>
   </aside>
   <main class="content">
+    <div class="error-container" *ngIf="errorMessage">
+      <span class="error">{{ errorMessage }}</span>
+    </div>
+
     <section class="header">
-      <span class="username">{{ userName }}</span>
-      <span class="clock">
-        <span>{{ hours }}</span>
-        <span class="separator">:</span>
-        <span>{{ minutes }}</span>
-        <span class="separator">:</span>
-        <span>{{ seconds }}</span>
-      </span>
+      <span class="username">Welcome, {{ userName }}</span>
+      <button class="logout-btn" (click)="logout()">Logout</button>
     </section>
     <div class="main-content">
       <section class="hero">
@@ -67,13 +78,23 @@
               />
             </div>
             <div>
-              <label for="heroScheduledOpenDate">Scheduled Open Date (Optional):</label>
-              <input
-                type="date"
-                id="heroScheduledOpenDate"
-                [(ngModel)]="heroScheduledOpenDate"
-                name="heroScheduledOpenDate"
-              />
+              <label>Scheduled Open Date & Time (Optional):</label>
+              <div class="date-time-group">
+                <input
+                  type="date"
+                  id="heroScheduledOpenDate"
+                  [(ngModel)]="heroScheduledOpenDate"
+                  name="heroScheduledOpenDate"
+                  (change)="updateScheduledDateTime('hero')"
+                />
+                <input
+                  type="time"
+                  id="heroScheduledOpenTime"
+                  [(ngModel)]="heroScheduledOpenTime"
+                  name="heroScheduledOpenTime"
+                  (change)="updateScheduledDateTime('hero')"
+                />
+              </div>
             </div>
             <div>
               <label for="heroIsPublic">Visibility:</label>
@@ -86,15 +107,6 @@
                 <option value="false">Private</option>
                 <option value="true">Public</option>
               </select>
-            </div>
-            <div *ngIf="heroIsPublic === 'false'">
-              <label for="heroPassword">Password (Optional):</label>
-              <input
-                type="password"
-                id="heroPassword"
-                [(ngModel)]="heroPassword"
-                name="heroPassword"
-              />
             </div>
             <button type="submit" [disabled]="!heroForm.valid">Create Capsule</button>
             <button type="button" (click)="closeUploadForm()">Cancel</button>
@@ -116,6 +128,15 @@
       <div class="right-column">
         <section class="friends">
           <div class="friends-text">Friends</div>
+          <div class="friends-list">
+            <div *ngFor="let friend of friends" class="friend-item">
+              <span>{{ friend.name }} ({{ friend.email }})</span>
+              <img *ngIf="friend.profilePhotoUrl" [src]="friend.profilePhotoUrl" alt="Profile Photo" class="friend-photo" />
+            </div>
+            <div *ngIf="friends.length === 0" class="no-friends">
+              <p>No friends found.</p>
+            </div>
+          </div>
         </section>
         <section class="Text">
           <div class="text-title">Text</div>
@@ -154,13 +175,23 @@
                 />
               </div>
               <div>
-                <label for="textScheduledOpenDate">Scheduled Open Date (Optional):</label>
-                <input
-                  type="date"
-                  id="textScheduledOpenDate"
-                  [(ngModel)]="textScheduledOpenDate"
-                  name="textScheduledOpenDate"
-                />
+                <label>Scheduled Open Date & Time (Optional):</label>
+                <div class="date-time-group">
+                  <input
+                    type="date"
+                    id="textScheduledOpenDate"
+                    [(ngModel)]="textScheduledOpenDate"
+                    name="textScheduledOpenDate"
+                    (change)="updateScheduledDateTime('text')"
+                  />
+                  <input
+                    type="time"
+                    id="textScheduledOpenTime"
+                    [(ngModel)]="textScheduledOpenTime"
+                    name="textScheduledOpenTime"
+                    (change)="updateScheduledDateTime('text')"
+                  />
+                </div>
               </div>
               <div>
                 <label for="textIsPublic">Visibility:</label>
@@ -173,15 +204,6 @@
                   <option value="false">Private</option>
                   <option value="true">Public</option>
                 </select>
-              </div>
-              <div *ngIf="textIsPublic === 'false'">
-                <label for="textPassword">Password (Optional):</label>
-                <input
-                  type="password"
-                  id="textPassword"
-                  [(ngModel)]="textPassword"
-                  name="textPassword"
-                />
               </div>
               <button
                 type="submit"
@@ -200,7 +222,7 @@
                   Scheduled Open Date: {{ capsule.scheduledOpenDate | date:'mediumDate' }}
                 </p>
                 <p *ngIf="!capsule.scheduledOpenDate">Scheduled Open Date: None</p>
-              </div>
+                </div>
               <img *ngIf="!isCapsuleUnlocked(capsule)" src="assets/secured-lock.png" alt="Locked" class="lock-icon" />
             </div>
           </div>
@@ -245,27 +267,6 @@
         <button class="delete-btn" (click)="deleteCapsule(selectedCapsule.id)">Delete</button>
         <button class="cancel-btn" (click)="closeFloatingWindow()">Close</button>
       </div>
-    </div>
-  </div>
-  <div class="floating-window" *ngIf="showPasswordWindow">
-    <div class="floating-window-content small-window">
-      <h4>Enter Capsule Password</h4>
-      <form (ngSubmit)="submitPassword()" #passwordForm="ngForm">
-        <div>
-          <label for="passwordInput">Password:</label>
-          <input
-            type="password"
-            id="passwordInput"
-            [(ngModel)]="passwordInput"
-            name="passwordInput"
-            required
-          />
-        </div>
-        <div class="button-group">
-          <button type="submit" [disabled]="!passwordForm.valid">Submit</button>
-          <button type="button" (click)="cancelPassword()">Cancel</button>
-        </div>
-      </form>
     </div>
   </div>
   <div class="floating-window" *ngIf="showDeleteWindow">

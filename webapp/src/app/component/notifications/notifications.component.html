@@ -1,0 +1,97 @@
+<div class="container">
+  <img src="assets/notification-bg.jpg" class="container-bg" alt="Background Image">
+  <aside class="sidebar">
+    <button
+      class="sidebar-btn logo-btn"
+      (click)="moveTo('home')"
+    >
+      <img [src]="isLogoHovered ? '/assets/logo-hover.png' : '/assets/logo.png'" alt="Logo" class="logo-icon" />
+    </button>
+    <nav>
+      <ul>
+        <li *ngFor="let icon of icons | slice:0:4">
+          <button
+            class="sidebar-btn"
+            (click)="navigateTo(icon.name)"
+            (mouseenter)="hoverIcon(icon.name)"
+            (mouseleave)="unhoverIcon(icon.name)"
+          >
+            <img [src]="icon.isHovered ? icon.hoverSrc : icon.defaultSrc" [alt]="icon.name" class="sidebar-icon" />
+          </button>
+        </li>
+      </ul>
+    </nav>
+    <div class="profile">
+      <button
+        class="sidebar-btn"
+        (click)="navigateTo('profile')"
+        (mouseenter)="hoverIcon('profile')"
+        (mouseleave)="unhoverIcon('profile')"
+      >
+        <img [src]="icons[4].isHovered ? icons[4].hoverSrc : icons[4].defaultSrc" alt="Profile" class="sidebar-icon" />
+      </button>
+    </div>
+  </aside>
+  <main class="hero-section">
+    <section class="notifications">
+      <div class="notifications-text">Notifications <button class="logout-btn" (click)="logout()">Logout</button></div>
+      <small *ngIf="errorMessage" class="error-message">{{ errorMessage }}</small>
+      <div *ngIf="notifications.length === 0 && !errorMessage" class="no-notifications">
+        No notifications.
+      </div>
+      <div *ngFor="let notification of notifications" class="notification-item">
+        <div class="notification-info">
+          <img
+            [src]="notification.senderProfilePhotoUrl || 'assets/default-profile.png'"
+            [alt]="notification.message + ' sender photo'"
+            class="profile-photo"
+          />
+          <div class="notification-content">
+            <p>{{ notification.message }}</p>
+            <small class="notification-timestamp">
+              {{ formatTimestamp(notification.createdAt) }}
+            </small>
+          </div>
+        </div>
+        <button
+          *ngIf="notification.type === 'friend_request'"
+          class="view-request-btn"
+          (click)="navigateTo('friends')"
+        >
+          View Request
+        </button>
+        <button
+          *ngIf="notification.type === 'friend_request_accepted'"
+          class="view-profile-btn"
+          (click)="navigateTo('friends')"
+        >
+          View Friends
+        </button>
+        <button
+          *ngIf="notification.type === 'capsule_opened'"
+          class="view-capsule-btn"
+          (click)="navigateTo('capsule')"
+        >
+          View Capsule
+        </button>
+        <button
+          *ngIf="notification.type === 'query_response'"
+          class="view-response-btn"
+          (click)="viewQueryResponse(notification)"
+        >
+          View Response
+        </button>
+      </div>
+    </section>
+    <div class="floating-window" *ngIf="showResponseWindow">
+      <div class="floating-window-content">
+        <h4>Thank you for sparing time</h4>
+        <p><strong>Query:</strong> {{ selectedQueryResponse?.message }}</p>
+        <p><strong>Response:</strong> {{ selectedQueryResponse?.response }}</p>
+        <div class="button-group">
+          <button (click)="closeResponseWindow()">Close</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

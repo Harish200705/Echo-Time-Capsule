@@ -138,6 +138,12 @@ img {
     position: absolute;
     right: 20px;
   }
+
+  .nav-buttons1 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
   
   .nav-btn {
     font-family: 'Exo';
@@ -153,13 +159,60 @@ img {
   
   
   .btn {
-    color: #ffffff;
+    font-family: 'Exo';
+    background: transparent;
+    padding: 10px 16px;
     border: none;
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 17px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
   }
   
   .btn:hover {
     background: none;
     color: white;
+  }
+
+  .account-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 150px;
+    background: #171715;
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    z-index: 1001;
+  }
+
+  .dropdown-btn {
+    font-family: 'Exo';
+    background: transparent;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 8px;
+    color: #99948c;
+    font-size: 15px;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+  }
+  
+  .dropdown-btn:hover {
+    background: #99948c;
+    color: #000000;
+  }
+  
+  .profile-btn {
+    margin-bottom: 5px;
+  }
+  
+  .logout-btn {
   }
 
 p {

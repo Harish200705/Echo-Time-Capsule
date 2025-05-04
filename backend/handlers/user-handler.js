@@ -1,4 +1,4 @@
-const {model} = require("mongoose");
+const { model } = require("mongoose");
 const User = require("./../db/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -14,7 +14,8 @@ async function registerUser(model) {
         isAdmin: model.isAdmin,
         dob: model.dob,
         gender: model.gender,
-        phone: model.phone,
+        phone: model.phone
+        // profilePhotoUrl defaults to schema default
     });
     await user.save();
     return user.toObject();
@@ -35,24 +36,24 @@ async function loginUser(email, password) {
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin,
+            profilePhotoUrl: user.profilePhotoUrl
         }, "secret", {
             expiresIn: "1h"
         });
-        return {token, user};
+        return { token, user };
     } else {
         return { error: "Invalid password" };
     }
-
 }
 
 async function getUser() {
-    let user = await User.find();
-    return user.map((c) => c.toObject());
+    let users = await User.find();
+    return users.map((c) => c.toObject());
 }
 
 async function getUserById(id) {
     let user = await User.findById(id);
-    return User.toObject();
+    return user ? user.toObject() : null;
 }
 
 async function updateUser(id, model) {
@@ -65,4 +66,4 @@ async function deleteUser(id) {
     return;
 }
 
-module.exports = { registerUser, loginUser };
+module.exports = { registerUser, loginUser, getUser, getUserById, updateUser, deleteUser };

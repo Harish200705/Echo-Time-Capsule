@@ -1,64 +1,89 @@
 <div class="body">
     <div class="main-content">
-        <!-- Slideshow on the left -->
-        <div class="container">
-            <div class="wrapper">
-                <img src="assets/slider-img/img-7.jpeg" alt="error">
-            </div>
+      <!-- Slideshow on the left -->
+      <div class="container">
+        <div class="wrapper">
+          <img src="assets/slider-img/img-7.jpeg" alt="Slideshow Image">
         </div>
-        
-        <!-- Form on the right for login -->
-        <div class="form-container">
-            <div class="top-left-logo">
-                <img src="/assets/logo.png" alt="Logo">
-                <span class="brand-name"></span>
+      </div>
+  
+      <!-- Form on the right for login -->
+      <div class="form-container">
+        <div class="top-left-logo">
+          <img src="/assets/logo.png" alt="Logo">
+          <span class="brand-name"></span>
+        </div>
+  
+        <div class="form-group">
+          <h2 class="login">Login</h2>
+        </div>
+  
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <!-- Backend Error Message -->
+          <small *ngIf="errorMessage" class="error">{{ errorMessage }}</small>
+  
+          <!-- Email Field -->
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="Enter your email"
+              size="103"
+            >
+            <small
+              *ngIf="loginForm.controls['email'].touched && loginForm.controls['email'].invalid"
+              class="error"
+            >
+              <ng-container *ngIf="loginForm.controls['email'].errors?.['required']">
+                Email is required.
+              </ng-container>
+              <ng-container *ngIf="loginForm.controls['email'].errors?.['email']">
+                Please enter a valid email.
+              </ng-container>
+            </small>
+          </div>
+  
+          <!-- Password Field -->
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="password-wrapper">
+              <input
+                id="password"
+                [type]="passwordFieldType"
+                formControlName="password"
+                placeholder="Enter your password"
+                size="103"
+              >
+              <img
+                src="assets/eyelashes.png"
+                alt="Show Password"
+                class="toggle-password"
+                (click)="togglePasswordVisibility()"
+              >
             </div>
-
+            <small
+              *ngIf="loginForm.controls['password'].touched && loginForm.controls['password'].invalid"
+              class="error"
+            >
+              Password is required.
+            </small>
+          </div>
+  
+          <!-- Forgot Password & Create Account Links -->
+          <div class="link-group">
             <div class="form-group">
-                <h2 class="login">Login</h2>
+              <span class="forget-password" (click)="onForgetPassword()">Forgot Password?</span>
             </div>
-
-            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-                <!-- Email Field -->
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" formControlName="email" placeholder="Enter your email" size="103">
-                    @if (loginForm.controls['email'].invalid && loginForm.controls['email'].touched) {
-                        <span class="error">Please enter a valid email.</span>
-                    }
-                </div>
-
-                <!-- Password Field -->
-                <div class="form-group">
-                    <label>Password</label>
-                    <div class="password-wrapper">
-                        <input [type]="passwordFieldType" formControlName="password" placeholder="Enter your password" size="103">
-                        <img src="assets/eyelashes.png" alt="Show Password" class="toggle-password" (click)="togglePasswordVisibility()">
-                    </div>
-                    @if (loginForm.controls['password'].invalid && loginForm.controls['password'].touched) {
-                        <span class="error">Password is required.</span>
-                    }
-                </div>
-
-                <!-- Remember Me Checkbox -->
-                <div class="form-group checkbox-group">
-                    <input type="checkbox" formControlName="rememberMe">
-                    <label>Remember Me</label>
-                </div>
-
-                <!-- Forgot Password & Create Account Links -->
-                <div class="link-group">
-                    <div class="form-group">
-                        <span class="forget-password" (click)="onForgetPassword()">Forgot Password?</span>
-                    </div>
-                    <div class="form-group">
-                        <span class="create-account" (click)="onCreateAccount()">Create Account</span>
-                    </div>
-                </div>
-
-                <!-- Submit Button -->
-                <button type="submit">Login</button>
-            </form>
-        </div>
+            <div class="form-group">
+              <span class="create-account" (click)="onCreateAccount()">Create Account</span>
+            </div>
+          </div>
+  
+          <!-- Submit Button -->
+          <button type="submit" [disabled]="loginForm.invalid">Login</button>
+        </form>
+      </div>
     </div>
-</div>
+  </div>

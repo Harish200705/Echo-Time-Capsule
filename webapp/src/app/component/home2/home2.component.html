@@ -1,23 +1,25 @@
 <div class="body">
-
   <nav class="navbar" [ngClass]="{ 'visible': isNavbarVisible }">
     <div class="nav-brand">
-      <img src="assets/logo.png" alt="Logo" class="logo" />
+      <img src="assets/logo.png" alt="Echo Logo" class="logo" />
       <span class="site-name">Echo</span>
     </div>
-  
+
     <div class="nav-buttons1">
       <button class="nav-btn" (click)="navigateTo('main')">Home</button>
       <button class="nav-btn" (click)="navigateTo('about')">About</button>
-      <button class="nav-btn" (click)="navigateTo('services')">Services</button>
       <button class="nav-btn" (click)="navigateTo('contact')">Contact</button>
     </div>
-  
+
     <div class="nav-buttons">
       @if (!isLoggedIn) {
         <button class="btn" (click)="goToLogin()">Login</button>
       } @else {
-        <button class="btn" (click)="goToAccount()">Account</button>
+        <button class="btn" (click)="toggleDropdown()">Account</button>
+        <div class="account-dropdown" *ngIf="isDropdownVisible">
+          <button class="dropdown-btn profile-btn" (click)="goToProfile()">Profile</button>
+          <button class="dropdown-btn logout-btn" (click)="logout()">Logout</button>
+        </div>
       }
     </div>
   </nav>
@@ -26,29 +28,32 @@
   <div class="container">
     <div class="header">
       <div class="letter">
-        <img src="/assets/letter/letter-e.png" alt="">
+        <img src="/assets/letter/letter-e.png" alt="Letter E">
       </div>
       <div class="letter">
-        <img src="/assets/letter/letter-c.png" alt="">
+        <img src="/assets/letter/letter-c.png" alt="Letter C">
       </div>
       <div class="letter">
-        <img src="/assets/letter/letter-h.png" alt="">
+        <img src="/assets/letter/letter-h.png" alt="Letter H">
       </div>
       <div class="letter">
-        <img src="/assets/letter/letter-o.png" alt="">
+        <img src="/assets/letter/letter-o.png" alt="Letter O">
       </div>
     </div>
 
     <div class="marquee-container">
-      <p class="marquee-text">Echo: A Message for the Future  |   Echo: A Message for the Future   |   
-        Echo: A Message for the Future   |   </p>
-    </div>
+  <div class="marquee-wrapper">
+    <span class="marquee-text">Echo: A Message for the Future  | </span>
+    <span class="marquee-text">Echo: A Message for the Future  | </span>
+    <span class="marquee-text">Echo: A Message for the Future  | </span>
+  </div>
+</div>
 
     <div class="mainContent">
       <div class="row" id="row-1">
         <div class="col">
           <div class="img-container right">
-            <img src="./assets/img-1.jpg" alt="error" />
+            <img src="./assets/img-1.jpg" alt="Capsule 1" />
             <p>Opened on Oct 02, 2024</p>
           </div>
         </div>
@@ -58,7 +63,7 @@
         <div class="col"></div>
         <div class="col">
           <div class="img-container left">
-            <img src="./assets/img-2.jpg" alt="error" />
+            <img src="./assets/img-2.jpg" alt="Capsule 2" />
             <p>Opened on Nov 05, 2024</p>
           </div>
         </div>
@@ -66,7 +71,7 @@
       <div class="row" id="row-3">
         <div class="col">
           <div class="img-container right">
-            <img src="./assets/img-3.jpg" alt="error" />
+            <img src="./assets/img-3.jpg" alt="Capsule 3" />
             <p>Opened on Dec 12, 2024</p>
           </div>
         </div>
@@ -76,7 +81,7 @@
         <div class="col"></div>
         <div class="col">
           <div class="img-container left">
-            <img src="./assets/img-4.jpeg" alt="error" />
+            <img src="./assets/img-4.jpeg" alt="Capsule 4" />
             <p>Scheduled on Apr 13, 2025</p>
           </div>
 
@@ -103,7 +108,7 @@
       <div class="row" id="row-5">
         <div class="col">
           <div class="img-container right">
-            <img src="./assets/img-5.jpeg" alt="error" />
+            <img src="./assets/img-5.jpeg" alt="Capsule 5" />
             <p>Scheduled on Jul 20, 2025</p>
           </div>
         </div>
@@ -113,7 +118,7 @@
         <div class="col"></div>
         <div class="col">
           <div class="img-container left">
-            <img src="./assets/img-6.jpeg" alt="error" />
+            <img src="./assets/img-6.jpeg" alt="Capsule 6" />
             <p>Scheduled on Aug 23, 2025</p>
           </div>
         </div>
@@ -125,13 +130,10 @@
     <section class="gradient"></section>
 
     <section class="website-content">
-      <img class="bg-image" src="/assets/connection-bg.png" alt="">
-      <div class="text">MAKE YOUR CAPSULE</div>
+      <img class="bg-image" src="/assets/connection-bg.png" alt="Connection Background">
+      <div class="text">{{ textToReveal }}</div>
     </section>
 
-    
-    
-  
     <div class="noise-overlay"></div>
     <div class="black-gradient"></div>
   </div>

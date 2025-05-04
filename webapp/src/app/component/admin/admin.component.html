@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+<div class="container">
+  <!-- Top Navbar -->
+  <nav class="navbar">
+    <div class="navbar-brand">Echo - Administrator</div>
+    <div class="navbar-actions">
+      <button class="signout-btn" (click)="signOut()">Sign Out</button>
+    </div>
+  </nav>
+
+  <!-- Hero Section with Graphs -->
+  <section class="hero">
+    <div class="graph-container">
+      <canvas id="newUsersChart"></canvas>
+      <canvas id="capsulesChart"></canvas>
+    </div>
+  </section>
+
+  <!-- User Queries Section -->
+  <section class="queries">
+    <h2>User Queries</h2>
+    <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+    <div *ngIf="userQueries.length === 0 && !errorMessage" class="no-queries">No unresolved queries available.</div>
+    <div class="query-list" *ngIf="userQueries.length > 0">
+      <div *ngFor="let query of userQueries" class="query-item" (click)="openQueryResponse(query)">
+        <span>{{ query.message }}</span>
+        <span class="query-timestamp">{{ query.timestamp | date:'medium' }}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Floating Window for Query Response -->
+  <div class="floating-window" *ngIf="showQueryWindow">
+    <div class="floating-window-content">
+      <h4>Respond to Query</h4>
+      <p>Query: {{ selectedQuery?.message }}</p>
+      <textarea [(ngModel)]="responseText" placeholder="Enter your response"></textarea>
+      <div class="button-group">
+        <button (click)="submitResponse()">Submit</button>
+        <button (click)="closeQueryWindow()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Floating Window -->
+  <div class="floating-window" *ngIf="showNotificationWindow">
+    <div class="floating-window-content">
+      <h4>Notification</h4>
+      <p>{{ notificationMessage }}</p>
+      <button (click)="closeNotificationWindow()">Close</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
