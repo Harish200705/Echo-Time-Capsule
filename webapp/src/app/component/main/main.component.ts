@@ -81,7 +81,7 @@ export class MainComponent implements OnInit, AfterViewInit {
   congratsMessage: string = '';
 
   private debugMode: boolean = true;
-  private backendUrl: string = 'http://localhost:3000';
+  private backendUrl: string = 'https://echo-backend-ty41.onrender.com';
   private isLogoutInProgress: boolean = false;
   private confettiTriggeredCapsules: Set<string> = new Set();
 
