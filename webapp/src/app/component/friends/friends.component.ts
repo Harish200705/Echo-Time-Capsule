@@ -64,7 +64,7 @@ export class FriendsComponent implements OnInit, AfterViewInit {
   private searchSubject = new Subject<string>();
   isLogoHovered: boolean = false;
 
-  private backendUrl: string = 'http://localhost:3000';
+  private backendUrl: string = 'https://echo-backend-ty41.onrender.com';
   private debugMode: boolean = true;
 
   constructor(
