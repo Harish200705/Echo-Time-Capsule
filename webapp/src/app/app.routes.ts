@@ -16,6 +16,10 @@ import { TestComponent } from './component/test/test.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
+  {
+    path: '',
+    component: Home2Component
+  },
     {
         path: 'register',
         component: RegisterComponent,
