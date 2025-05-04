@@ -1,0 +1,217 @@
+<div class="container">
+    <div *ngIf="showCongratsMessage" class="congrats-overlay"></div>
+    <div *ngIf="showCongratsMessage" class="congrats-message">
+      {{ congratsMessage }}
+    </div>
+  
+    <img src="assets/main-bg.jpg" class="container-bg" alt="Background Image">
+    <aside class="sidebar">
+      <button class="sidebar-btn logo-btn" (click)="moveTo('home')" (mouseenter)="isLogoHovered = true" (mouseleave)="isLogoHovered = false">
+        <img [src]="isLogoHovered ? '/assets/logo-hover.png' : '/assets/logo.png'" alt="Logo" class="logo-icon" />
+      </button>
+      <nav>
+        <ul>
+          <li *ngFor="let icon of icons | slice:0:4">
+            <button class="sidebar-btn" (click)="navigateTo(icon.name)" (mouseenter)="hoverIcon(icon.name)" (mouseleave)="unhoverIcon(icon.name)">
+              <img [src]="icon.isHovered ? icon.hoverSrc : icon.defaultSrc" [alt]="icon.name" class="sidebar-icon" />
+            </button>
+          </li>
+        </ul>
+      </nav>
+      <div class="profile">
+        <button class="sidebar-btn" (click)="navigateTo('profile')" (mouseenter)="hoverIcon('profile')" (mouseleave)="unhoverIcon('profile')">
+          <img [src]="icons[4].isHovered ? icons[4].hoverSrc : icons[4].defaultSrc" alt="Profile" class="sidebar-icon" />
+        </button>
+      </div>
+    </aside>
+    <main class="content">
+      <div class="error-container" *ngIf="errorMessage">
+        <span class="error">{{ errorMessage }}</span>
+      </div>
+  
+      <section class="header">
+        <span class="username">Welcome, {{ userName }}</span>
+        <button class="logout-btn" (click)="logout()">Logout</button>
+      </section>
+      <div class="main-content">
+        <section class="hero">
+          <div class="floating-nav">Quick Access</div>
+          <div class="floating-btn" (click)="openUploadForm('hero')">+</div>
+          <div class="upload-form" *ngIf="showUploadForm && uploadFormType === 'hero'">
+            <form (ngSubmit)="uploadFile('hero')" #heroForm="ngForm">
+              <div class="heroTitle">Upload Memories</div>
+              <div>
+                <label for="heroCapsuleName">Capsule Name:</label>
+                <input type="text" id="heroCapsuleName" [(ngModel)]="heroCapsuleName" name="heroCapsuleName" required />
+              </div>
+              <div>
+                <label for="heroFiles">Select Files (Images, Videos, PDFs, Docs):</label>
+                <input type="file" id="heroFiles" (change)="onFileSelected($event, 'hero')" accept="image/*,video/mp4,application/pdf,application/msword" name="heroFiles" multiple />
+                <div *ngIf="heroSelectedFiles.length > 0" class="file-list">
+                  <p>Selected Files:</p>
+                  <ul>
+                    <li *ngFor="let file of heroSelectedFiles">{{ file.name }}</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <label>Scheduled Open Date & Time (Optional):</label>
+                <div class="date-time-group">
+                  <input type="date" id="heroScheduledOpenDate" [(ngModel)]="heroScheduledOpenDate" name="heroScheduledOpenDate" (change)="updateScheduledDateTime('hero')" />
+                  <input type="time" id="heroScheduledOpenTime" [(ngModel)]="heroScheduledOpenTime" name="heroScheduledOpenTime" (change)="updateScheduledDateTime('hero')" />
+                </div>
+              </div>
+              <div>
+                <label for="heroIsPublic">Visibility:</label>
+                <select id="heroIsPublic" [(ngModel)]="heroIsPublic" name="heroIsPublic" required>
+                  <option value="false">Private</option>
+                  <option value="true">Public</option>
+                </select>
+              </div>
+              <div>
+                <label for="heroPassword">Password (Optional):</label>
+                <input type="password" id="heroPassword" [(ngModel)]="heroPassword" name="heroPassword" />
+              </div>
+              <button type="submit" [disabled]="!heroForm.valid || heroSelectedFiles.length === 0">Create Capsule</button>
+              <button type="button" (click)="closeUploadForm()">Cancel</button>
+            </form>
+          </div>
+          <div class="capsule-list">
+            <div *ngFor="let capsule of heroCapsules" class="capsule-item" [ngClass]="{'locked': !isCapsuleUnlocked(capsule), 'unlocked': isCapsuleUnlocked(capsule)}" (click)="isCapsuleUnlocked(capsule) && openCapsule(capsule)">
+              <div class="capsule-content">
+                <p>Title: {{ capsule.capsuleName || 'Unnamed Capsule' }}</p>
+                <p *ngIf="capsule.scheduledOpenDate">
+                  Scheduled Open Date: {{ capsule.scheduledOpenDate | date:'mediumDate' }}
+                </p>
+                <p *ngIf="!capsule.scheduledOpenDate">Scheduled Open Date: None</p>
+              </div>
+              <img *ngIf="!isCapsuleUnlocked(capsule)" src="assets/secured-lock.png" alt="Locked" class="lock-icon" />
+            </div>
+          </div>
+        </section>
+        <div class="right-column">
+          <section class="friends">
+            <div class="friends-text">Friends</div>
+            <div class="friends-list">
+              <div *ngFor="let friend of friends" class="friend-item">
+                <span>{{ friend.name }} ({{ friend.email }})</span>
+                <img *ngIf="friend.profilePhotoUrl" [src]="friend.profilePhotoUrl" alt="Profile Photo" class="friend-photo" />
+              </div>
+              <div *ngIf="friends.length === 0" class="no-friends">
+                <p>No friends found.</p>
+              </div>
+            </div>
+          </section>
+          <section class="Text">
+            <div class="text-title">Text</div>
+            <div class="floating-btn text-btn" (click)="openUploadForm('text')">+</div>
+            <div class="upload-form" *ngIf="showUploadForm && uploadFormType === 'text'">
+              <form (ngSubmit)="uploadFile('text')" #textForm="ngForm">
+                <div class="heroTitle">Upload Memories</div>
+                <div>
+                  <label for="textCapsuleName">Title:</label>
+                  <input type="text" id="textCapsuleName" [(ngModel)]="textCapsuleName" name="textCapsuleName" required />
+                </div>
+                <div>
+                  <label for="textContent">Description:</label>
+                  <textarea id="textContent" [(ngModel)]="textContent" name="textContent" rows="4"></textarea>
+                </div>
+                <div>
+                  <label for="textFiles">Select Files (Text, MP3):</label>
+                  <input type="file" id="textFiles" (change)="onFileSelected($event, 'text')" accept="text/plain,audio/mpeg" name="textFiles" multiple />
+                  <div *ngIf="textSelectedFiles.length > 0" class="file-list">
+                    <p>Selected Files:</p>
+                    <ul>
+                      <li *ngFor="let file of textSelectedFiles">{{ file.name }}</li>
+                    </ul>
+                  </div>
+                </div>
+                <div>
+                  <label>Scheduled Open Date & Time (Optional):</label>
+                  <div class="date-time-group">
+                    <input type="date" id="textScheduledOpenDate" [(ngModel)]="textScheduledOpenDate" name="textScheduledOpenDate" (change)="updateScheduledDateTime('text')" />
+                    <input type="time" id="textScheduledOpenTime" [(ngModel)]="textScheduledOpenTime" name="textScheduledOpenTime" (change)="updateScheduledDateTime('text')" />
+                  </div>
+                </div>
+                <div>
+                  <label for="textIsPublic">Visibility:</label>
+                  <select id="textIsPublic" [(ngModel)]="textIsPublic" name="textIsPublic" required>
+                    <option value="false">Private</option>
+                    <option value="true">Public</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="textPassword">Password (Optional):</label>
+                  <input type="password" id="textPassword" [(ngModel)]="textPassword" name="textPassword" />
+                </div>
+                <button type="submit" [disabled]="!textForm.valid || (!textContent.trim() && textSelectedFiles.length === 0)">Create Capsule</button>
+                <button type="button" (click)="closeUploadForm()">Cancel</button>
+              </form>
+            </div>
+            <div class="capsule-list">
+              <div *ngFor="let capsule of textCapsules" class="capsule-item" [ngClass]="{'locked': !isCapsuleUnlocked(capsule), 'unlocked': isCapsuleUnlocked(capsule)}" (click)="isCapsuleUnlocked(capsule) && openCapsule(capsule)">
+                <div class="capsule-content">
+                  <p>Title: {{ capsule.capsuleName || 'Unnamed Capsule' }}</p>
+                  <p *ngIf="capsule.scheduledOpenDate">
+                    Scheduled Open Date: {{ capsule.scheduledOpenDate | date:'mediumDate' }}
+                  </p>
+                  <p *ngIf="!capsule.scheduledOpenDate">Scheduled Open Date: None</p>
+                </div>
+                <img *ngIf="!isCapsuleUnlocked(capsule)" src="assets/secured-lock.png" alt="Locked" class="lock-icon" />
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  
+    <div class="floating-window" *ngIf="showFloatingWindow && selectedCapsule" style="z-index: 10001;">
+      <div class="floating-window-content">
+        <h3>{{ selectedCapsule.capsuleName }}</h3>
+        <p *ngIf="selectedCapsule.textContent">{{ selectedCapsule.textContent }}</p>
+        <div *ngIf="selectedCapsule.files.length > 0" class="file-list">
+          <h4>Files:</h4>
+          <ul>
+            <li *ngFor="let file of selectedCapsule.files">
+              <a [href]="file.fileUrl" target="_blank">{{ file.fileName }}</a>
+              ({{ file.fileType | titlecase }}, {{ file.fileSize / 1024 | number:'1.0-2' }} KB)
+            </li>
+          </ul>
+        </div>
+        <div *ngIf="selectedCapsule.files.length === 1 && selectedCapsule.files[0].safeFileUrl">
+          <div [ngSwitch]="selectedCapsule.files[0].fileType">
+            <img *ngSwitchCase="'image'" [src]="selectedCapsule.files[0].safeFileUrl" alt="Capsule Image" class="capsule-media" />
+            <video *ngSwitchCase="'video'" [src]="selectedCapsule.files[0].safeFileUrl" controls class="capsule-media"></video>
+            <audio *ngSwitchCase="'mp3'" [src]="selectedCapsule.files[0].safeFileUrl" controls class="capsule-media"></audio>
+            <iframe *ngSwitchCase="'pdf'" [src]="selectedCapsule.files[0].safeFileUrl" class="capsule-media"></iframe>
+            <p *ngSwitchDefault>File: <a [href]="selectedCapsule.files[0].fileUrl" target="_blank">{{ selectedCapsule.files[0].fileName }}</a></p>
+          </div>
+        </div>
+        <p *ngIf="selectedCapsule.scheduledOpenDate">
+          Scheduled Open Date: {{ selectedCapsule.scheduledOpenDate | date:'medium' }}
+        </p>
+        <p>Visibility: {{ selectedCapsule.isPublic ? 'Public' : 'Private' }}</p>
+        <p>Owner ID: {{ selectedCapsule.userId }}</p>
+        <button (click)="deleteCapsule(selectedCapsule.id)">Delete Capsule</button>
+        <button (click)="closeFloatingWindow()">Close</button>
+      </div>
+    </div>
+  
+    <div class="password-window" *ngIf="showPasswordWindow" style="z-index: 10002;">
+      <div class="password-window-content">
+        <h3>Enter Password</h3>
+        <input type="password" [(ngModel)]="passwordInput" placeholder="Password" />
+        <button (click)="submitPassword()">Submit</button>
+        <button (click)="cancelPassword()">Cancel</button>
+      </div>
+    </div>
+  
+    <div class="delete-window" *ngIf="showDeleteWindow" style="z-index: 10002;">
+      <div class="delete-window-content">
+        <h3>Confirm Deletion</h3>
+        <p>Are you sure you want to delete this capsule?</p>
+        <button (click)="confirmDelete()">Yes</button>
+        <button (click)="cancelDelete()">No</button>
+      </div>
+    </div>
+  </div>

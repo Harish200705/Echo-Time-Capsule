@@ -1,0 +1,481 @@
+.container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .container-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+  }
+  
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 80px;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    z-index: 1000;
+  }
+  
+  .sidebar-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    margin: 10px 0;
+  }
+  
+  .logo-btn {
+    margin-bottom: 20px;
+  }
+  
+  .logo-icon {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .sidebar-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .profile {
+    margin-top: auto;
+  }
+  
+  .content {
+    margin-left: 100px;
+    padding: 20px;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .username {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  .logout-btn {
+    background: #ff6f61;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .logout-btn:hover {
+    background: #e55a50;
+  }
+  
+  .main-content {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .hero, .Text {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+  }
+  
+  .right-column {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .floating-nav {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #3498db;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  .floating-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #f1c40f;
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  .floating-btn:hover {
+    background: #d4ac0d;
+  }
+  
+  .text-btn {
+    background: #2ecc71;
+  }
+  
+  .text-btn:hover {
+    background: #27ae60;
+  }
+  
+  .upload-form {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    max-width: 500px;
+  }
+  
+  .upload-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .heroTitle {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .upload-form label {
+    font-size: 16px;
+  }
+  
+  .upload-form input[type="text"],
+  .upload-form input[type="password"],
+  .upload-form input[type="date"],
+  .upload-form input[type="time"],
+  .upload-form select,
+  .upload-form textarea {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 14px;
+  }
+  
+  .upload-form input[type="file"] {
+    padding: 5px 0;
+  }
+  
+  .upload-form textarea {
+    resize: vertical;
+  }
+  
+  .date-time-group {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .upload-form button {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .upload-form button[type="submit"] {
+    background: #2ecc71;
+  }
+  
+  .upload-form button[type="submit"]:hover {
+    background: #27ae60;
+  }
+  
+  .upload-form button[type="button"] {
+    background: #ff6f61;
+  }
+  
+  .upload-form button[type="button"]:hover {
+    background: #e55a50;
+  }
+  
+  .upload-form button:disabled {
+    background: #7f8c8d;
+    cursor: not-allowed;
+  }
+  
+  .file-list {
+    margin-top: 10px;
+  }
+  
+  .file-list p {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .file-list ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .file-list li {
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+  
+  .capsule-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .capsule-item {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 15px;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s;
+  }
+  
+  .capsule-item:hover {
+    transform: scale(1.05);
+  }
+  
+  .capsule-item.locked {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+  
+  .capsule-item.unlocked {
+    background: rgba(255, 255, 255, 0.3);
+  }
+  
+  .capsule-content p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: white;
+  }
+  
+  .lock-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+  }
+  
+  .friends {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  
+  .friends-text {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: white;
+  }
+  
+  .friends-list {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  .friend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    color: white;
+  }
+  
+  .friend-photo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  
+  .no-friends p {
+    color: white;
+    font-style: italic;
+  }
+  
+  .text-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: white;
+  }
+  
+  .floating-window {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .floating-window-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  
+  .floating-window-content h3 {
+    margin-top: 0;
+  }
+  
+  .floating-window-content p {
+    margin: 10px 0;
+  }
+  
+  .floating-window-content button {
+    background: #ff6f61;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .floating-window-content button:hover {
+    background: #e55a50;
+  }
+  
+  .floating-window-content button:last-child {
+    background: #3498db;
+  }
+  
+  .floating-window-content button:last-child:hover {
+    background: #2980b9;
+  }
+  
+  .capsule-media {
+    max-width: 100%;
+    max-height: 300px;
+    margin: 10px 0;
+  }
+  
+  .password-window, .delete-window {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .password-window-content, .delete-window-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  .password-window-content input {
+    padding: 10px;
+    margin: 10px 0;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .password-window-content button, .delete-window-content button {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .password-window-content button:hover, .delete-window-content button:hover {
+    background: #2980b9;
+  }
+  
+  .password-window-content button:last-child, .delete-window-content button:last-child {
+    background: #ff6f61;
+  }
+  
+  .password-window-content button:last-child:hover, .delete-window-content button:last-child:hover {
+    background: #e55a50;
+  }
+  
+  .congrats-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+  }
+  
+  .congrats-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    z-index: 10001;
+  }
+  
+  .error-container {
+    text-align: center;
+    margin: 10px 0;
+  }
+  
+  .error {
+    color: #ff6f61;
+    font-weight: bold;
+  }

@@ -12,6 +12,7 @@ import { CapsulesComponent } from './component/capsules/capsules.component';
 import { AdminComponent } from './component/admin/admin.component';
 import { ContactComponent } from './component/contact/contact.component';
 import { AboutComponent } from './component/about/about.component';
+import { TestComponent } from './component/test/test.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -62,5 +63,9 @@ export const routes: Routes = [
     {
         path: 'about',
         component: AboutComponent
+    },
+    {
+        path: 'test',
+        component: TestComponent,
     }
 ];
