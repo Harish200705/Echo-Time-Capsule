@@ -36,7 +36,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
   private capsulesChart: Chart | null = null;
 
   private debugMode: boolean = true;
-  private backendUrl: string = 'http://localhost:3000';
+  private backendUrl: string = 'https://echo-backend-ty41.onrender.com';
   private isLogoutInProgress: boolean = false;
 
   constructor(
